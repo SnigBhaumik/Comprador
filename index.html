@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>The Alfresco Client</title>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
+	<script type="text/javascript" src="js/lib/base64.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+
+<body>
+	<div id="connectInfo" width="50%">
+		<h2>Connect to your Alfresco Server</h2>
+		<div class="note">Put your Alfresco Server CMIS ATOMPUB Url and User Credential below.</div>
+		<table id="connectDet" border="0" align="left" cellspacing="10" style="margin-left: 20px" width="100%">
+			<tr><td align="left">Alfresco Server Url<br/><input type="url" id="serverUrl" size="30px" value="http://localhost:8080/alfresco" />/cmisatom</td></tr>
+			<tr><td align="left">User Name<br/><input type="text" id="userName" value="admin" /></td></tr>
+			<tr><td align="left">Password<br/><input type="password" id="password" value="admin" /></td></tr>
+			<tr><td align="left"><button type="button" onclick="loginToServer();">Connect Me !!!</button></td></tr>
+		</table>
+		<div id="resinfo" style="display: none"></div>
+		<button type="button" onclick="window.location='AlfClient.html'" id="getmein" style="display: none; margin-top: 10px">Okay, Get Me In</button>
+	</div>
+</body>
+
+</html>
