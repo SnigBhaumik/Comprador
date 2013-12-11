@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Comprador - The Alfresco Client</title>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+
+	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
+	<script type="text/javascript" src="js/lib/base64.min.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+
+<body>
+	<script>
+		checkUser();
+	</script>
+
+	<header class="pageheader">
+		<h2>Comprador</h2>
+	</header>
+
+	<section id="menupanel">something</section>
+
+	<div id="mainwindow" width="100%">
+		<section id="toppanel">
+			<nav id="breadcrumb"></nav>
+		</section>
+		<section id="leftpanel">
+			<ul id="folderlist"></ul>
+		</section>
+		<section id="rightpanel">
+			<table id="docslist" width="100%" cellspacing="5" cellspacing="10"></table>
+		</section>
+		<footer id="pagefooter">
+			<header>
+				<h2>Comprador</h2>
+				<p class="note">The Alfresco CMIS Client.</p>
+			</header>
+		</footer>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			buildMenu();
+			showRootFolders();
+		});
+	</script>
+
+</body>
+</html>

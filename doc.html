@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Comprador - The Alfresco Client</title>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css" />
+
+	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
+	<script type="text/javascript" src="js/lib/base64.min.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+
+<body>
+	<script>
+		checkUser();
+	</script>
+
+	<header class="pageheader">
+		<h2>Comprador</h2>
+	</header>
+
+	<section id="menupanel">something</section>
+	
+	<div id="mainwindow" width="100%">
+		<section id="toppanel"><h3 id="docheader"></h3></section>
+		<section id="previewpanel">
+			<embed type="application/x-shockwave-flash" id="flashvidpreview" width="100%" height="600px" />
+		</section>
+		<section id="propertiespanel">
+			<section id="cmispropertiespanel">
+				<h4>CMIS Properties</h4>
+				<table id="docproperties"></table>
+			</section>
+			<section id="alfpropertiespanel">
+				<h4>Alfresco Properties</h4>
+				<table id="docalfproperties"></table>
+			</section>
+			<section id="aspectspanel">
+				<h4>Alfresco Aspects</h4>
+				<table id="docalfaspects"></table>
+			</section>
+			<section id="actionspanel">
+				<table id="docactions">
+					<tr><td><img src="images/download.png" class="action-icon" /></td><td>Download Document</td></tr>
+					<tr><td><img src="images/remove.png" class="action-icon" /></td><td>Delete Document</td></tr>
+					<tr><td><img src="images/upload.png" class="action-icon" /></td><td>Upload new version</td></tr>
+				</table>
+			</section>
+			<section id="versionspanel">
+				<h4>Document Versions</h4>
+				<ul id="docversions"></ul>
+			</section>
+		</section>
+		<footer id="pagefooter">
+			<header>
+				<h2>Comprador</h2>
+				<p class="note">The Alfresco CMIS Client.</p>
+			</header>
+		</footer>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			buildMenu();
+			showDocument();
+		});
+	</script>
+</body>
+
+</html>
+
