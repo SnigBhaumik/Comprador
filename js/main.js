@@ -19,7 +19,7 @@ var brdpath = new Array();
 
 
 function buildMenu() {
-	$("#menupanel").html('<a class="repositorylink" href="repository.html">Repository</a>&nbsp;&nbsp;<a class="dashboardlink" href="landing.html">Dashboard</a>&nbsp;<input type="search" class="searchbox" style="float:right" />');
+	$("#menupanel").html('<a class="repositorylink" href="repository.html">Repository</a>&nbsp;&nbsp;<a class="dashboardlink" href="landing.html">Dashboard</a>&nbsp;&nbsp;<a class="disconnectlink" href="index.html">Disconnect</a><input type="search" class="searchbox" style="float:right" />');
 	$(".searchbox").keypress(function(event) {
 		if (event.which == 13)
 		{
@@ -30,6 +30,19 @@ function buildMenu() {
 			else
 			{
 				window.location = "search.html?kw=" + event.target.value;
+			}
+		}
+	});
+	$("#searchbox").keypress(function(event) {
+		if (event.which == 13)
+		{
+			if (event.target.value == "")
+			{
+				alert("Please enter search term.");
+			}
+			else
+			{
+				search(event.target.value);
 			}
 		}
 	});
@@ -62,10 +75,8 @@ function setAuthenticationTicket() {
 function loginToServer() {
 	sessionStorage.alfurl = $('#serverUrl').val();
 	$.ajax({
-		url:sessionStorage.alfurl + '/service/api/login',
-
-		data:JSON.stringify({username:$('#userName').val(), password:$('#password').val()}),
-
+		url: sessionStorage.alfurl + '/service/api/login',
+		data: JSON.stringify({username:$('#userName').val(), password:$('#password').val()}),
 		contentType: 'application/json; charset=UTF-8',
 		type: 'POST',
 		dataType: 'json',
@@ -74,15 +85,44 @@ function loginToServer() {
 		success: function(data) {
 			sessionStorage.ticket = data.data.ticket;
 			sessionStorage.user = $('#userName').val();
-			$("#repositoryId").html("Connected to Alfresco CMIS Repository");
 			setAuthenticationTicket();
 			initiateCMIS();
 		},
 
-		failure: function(data) {
-			alert(data);
+		/*error: function(jqXHR, textStatus, errorThrown) {
+			alert(errorThrown);
+		},*/
+
+		statusCode: {
+			403: function() {
+				abandonConnection();
+			}
 		}
 	})
+}
+
+function abandonConnection(logout) {
+	sessionStorage.ticket = null;
+	sessionStorage.user = null;
+
+	if (logout)
+	{
+		$("#resinfo").html("");
+		$("#resinfo").css("display", "none");
+		$("#getmein").css("display", "none");
+	}
+	else
+	{
+		var resinfo = "";
+		resinfo = "<br/><strong>Unable to connect to the specified Respository.</strong>";
+		resinfo += "<br/><strong>Some of the things you can check.</strong>";
+		resinfo += "<ul><li>The server url is correct.</li>";
+		resinfo += "<li>The user credential is correct.</li>";
+		resinfo += "<li>Your Alfresco server is up and running.</li></ul>";
+		$("#resinfo").html(resinfo);
+		$("#resinfo").css("display", "block");
+		$("#getmein").css("display", "none");
+	}
 }
 
 function initiateCMIS() {
@@ -124,7 +164,6 @@ function showRootFolders() {
 			else
 			{
 				filelist.push(obj.object.properties["cmis:objectId"].value);
-				files += "<li><a href='javascript:void(0)' onclick='showFolders(\"" + obj.object.properties["cmis:objectId"].value + "\")'>" + obj.object.properties["cmis:name"].value + "</a></li>";
 			}
 		}
 
@@ -152,7 +191,6 @@ function showFolders(objid) {
 				else
 				{
 					filelist.push(item.cmisobject.objectId);
-					files += "<li><a href='javascript:void(0)' onclick='showFolders(\"" + item.cmisobject.objectId + "\")'>" + item.cmisobject.name + "</a></li>";
 					filecount++;
 				}
 			}
@@ -166,7 +204,6 @@ function showFolders(objid) {
 			}
 			if (filecount > 0)
 			{
-				//$("#rightpanel").html(files);
 				buildDocTable(filelist);
 			}
 			else
@@ -248,6 +285,8 @@ function getTasks() {
 }
 
 function buildDocTable(filelist) {
+	$("#docslist").empty();
+
 	for (var f in filelist)
 	{
 		$.getFeed ({
@@ -277,6 +316,7 @@ function showDocument() {
 	var did = $.QueryString["docid"];
 	var dnm = $.QueryString["docname"];
 	$("#docheader").html(dnm);
+	$.msg({ bgPath : 'images/', autoUnblock : false, clickUnblock : false, content : 'Please wait, retrieving data ...' });
 
 	$.getFeed ({
 		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(did) + '?renditionFilter=alf:webpreview',
@@ -296,6 +336,7 @@ function showDocument() {
 				var p = x.firstChild ? x.firstChild.textContent : "<i>None</i>";
 				$("#docproperties").append(x.attributes["displayName"].nodeValue + ": " + p + ".<br/>");
 			}*/
+			$.msg( 'unblock' );
 		}})
 }
 
@@ -346,13 +387,101 @@ function showDocVersions(did) {
 		}})
 }
 
-function search() {
-	var kw = $.QueryString["kw"];
-	if (kw == "")
+function search(term) {
+	var kw = "";
+	if (!term)
 	{
-		return;
+		kw = $.QueryString["kw"];
+		if (kw == "")
+		{
+			return;
+		}
+		$("#searchbox").val(kw);
 	}
+	else
+		kw = term;
+
 	$("#searchheader").html("Searching keyword \"" + kw + "\"");
 
+	var qry = "";
+	$.msg({ bgPath : 'images/', autoUnblock : false, clickUnblock : false, content : 'Please wait, performing search ...' });
+
+	if ($('input:radio[name=searchoption]:checked').val() == "D")
+	{
+		qry = encodeURIComponent("SELECT * FROM cmis:document WHERE cmis:name LIKE '%" + kw + "%' OR CONTAINS ('" + kw + "')");
+
+		$.getFeed ({
+			url: sessionStorage.alfurl + '/service/cmis/query?q=' + qry,
+			success : function (feed) {
+
+				var files = "", filecount = 0;
+				var filelist = new Array();
+				for (var i = 0; i < feed.items.length; i++)
+				{
+					var item = feed.items[i];
+					if (item.cmisobject.baseTypeId == "cmis:folder")
+					{
+					}
+					else
+					{
+						filelist.push(item.cmisobject.objectId);
+						filecount++;
+					}
+				}
+				if (filecount > 0)
+				{
+					//$("#rightpanel").html(files);
+					buildDocTable(filelist);
+					$(".searchsummary").html("Search Summary");
+					$.msg( 'unblock' );
+				}
+				else
+				{
+					//$("#rightpanel").html("No files are there in this folder.");
+				}
+				
+				
+			}})
+	}
+	else
+	{
+
+		qry = encodeURIComponent("SELECT * FROM cmis:folder WHERE cmis:name LIKE '%" + kw + "%'");
+
+		$.getFeed ({
+			url: sessionStorage.alfurl + '/service/cmis/query?q=' + qry,
+			success : function (feed) {
+
+				var foldercount = 0;
+				var folderlist = new Array();
+				for (var i = 0; i < feed.items.length; i++)
+				{
+					var item = feed.items[i];
+					if (item.cmisobject.baseTypeId == "cmis:folder")
+					{
+						folderlist.push(item.cmisobject.objectId);
+						foldercount++;
+					}
+					else
+					{
+					}
+				}
+				if (foldercount > 0)
+				{
+					//$("#rightpanel").html(files);
+					buildDocTable(folderlist);
+					$(".searchsummary").html("Search Summary");
+					$.msg( 'unblock' );
+				}
+				else
+				{
+					//$("#rightpanel").html("No files are there in this folder.");
+				}
+				
+				
+			}})
+
+	}
 	
+
 }

@@ -6,11 +6,14 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.msg.css" />
 
 	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
 	<script type="text/javascript" src="js/lib/base64.min.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.center.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -28,24 +31,25 @@
 	<div id="mainwindow" width="100%">
 		<section id="toppanel">
 			<header><h3 id="searchheader">Search Repository</h3></header>
+			<p class="searchsummary"></p>
 		</section>
 		<section id="leftpanel">
 			<input type="search" id="searchbox" />
 			<fieldset class="searchoptions">
 				<legend>Search What?</legend>
-				<input type="checkbox" id="searchname" class="searchoption" /><label for="searchname">Name</label><br/>
-				<input type="checkbox" id="searchtitle" class="searchoption" /><label for="searchtitle">Title</label><br/>
-				<input type="checkbox" id="searchdesc" class="searchoption" /><label for="searchdesc">Description</label><br/>
-				<input type="checkbox" id="searchcontent" class="searchoption" /><label for="searchcontent">Content</label>
+				<input type="radio" id="searchdoc" class="searchoption" name="searchoption" checked value="D" /><label for="searchdoc">Documents</label><br/>
+				<input type="radio" id="searchfolder" class="searchoption" name="searchoption" value="F" /><label for="searchfolder">Folders</label><br/>
 			</fieldset>
 		</section>
 		<section id="rightpanel">
-			jhjh
+			<table id="docslist" width="100%" cellspacing="5" cellspacing="10"></table>
 		</section>
 		<footer id="pagefooter">
 			<header>
 				<h2>Comprador</h2>
-				<p class="note">The Alfresco CMIS Client.</p>
+				<p class="note">The Alfresco CMIS HTML5 Client&nbsp;|&nbsp;
+				<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;
+				&copy&nbsp;Snig Bhaumik 2013</p>
 			</header>
 		</footer>
 	</div>

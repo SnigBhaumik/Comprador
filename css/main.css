@@ -2,31 +2,64 @@ body {
 	font-family: verdana, helvetica, arial, sans-serif;
 	font-size: 12px;
 	color: #FFFFFF;
+	padding-top: 10px;
+}
+
+.pageheader h2 {
+	padding: 0;
+	margin: 0;
 }
 
 .pageheader {
+	padding: 2px 0 11px 66px;
+	background: url("../images/application.png");
+	background-repeat: no-repeat;
+	background-size: 50px 50px;
+	background-origin: padding-box;
+	color: #8B4513;
+	margin-left: 10px;
+	width: 40%;
+	font-size: 20px;
+}
+
+#pageheader {
 	padding: 2px 0 8px 66px;
 	background: url("../images/application.png");
 	background-repeat: no-repeat;
 	background-size: 50px 50px;
 	background-origin: padding-box;
+
+	color: #8B4513;
+
+	width: 100px;
+	position: absolute;
+	top: 10px;
+	bottom: 0;
+	left: 0;
+	right: 60px;
+
+	margin: auto;
+}
+
+#header {
+	padding: 8px 0 8px 40px;
+	background-color: #DC143C;
 	color: #000000;
-	margin-left: 10px;
-	width: 40%;
+	border-top-left-radius: 15px; 
+	border-top-right-radius: 15px; 
 }
 
 #connectInfo {
 	width: 500px;
-	height: 500px;
+	height: 550px;
 
 	position: absolute;
-	top:0;
+	top: 10px;
 	bottom: 0;
 	left: 0;
 	right: 0;
 
 	margin: auto;
-	padding: 20px;
 
 	border-radius: 15px; 
 	-moz-border-radius: 15px; 
@@ -48,7 +81,7 @@ body {
 	border-bottom-left-radius: 15px; 
 	border-bottom-right-radius: 15px; 
 	-moz-border-radius: 15px; 
-	background-color: #E0FFFF;
+	background-color: #B8860B;
 }
 
 #docpopupwindow {
@@ -71,6 +104,10 @@ body {
 
 
 .note {
+	margin-bottom: 10px;
+}
+
+.searchsummary {
 	margin-bottom: 10px;
 }
 
@@ -118,10 +155,15 @@ body {
     padding:4px 4px 4px 22px;
 }
 
+.disconnectlink {
+	background: transparent url('../images/disconnect-icon.png') no-repeat scroll 4px 4px;
+    padding:4px 4px 4px 22px;
+}
+
 .searchoptions {
 	border-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: red;
+	background-color: #FFA500;
 	clear: both;
 	padding: 10px;
 	margin-top: 10px;
@@ -133,27 +175,50 @@ body {
 	margin-left: 30px;
 }
 
+.btn {
+	background: #cccccc;
+	display: inline-block;
+	font-size: 12px;
+	font-weight: bolder;
+	padding: 8px 14px;
+	margin: 0 8px 0 0;
+	cursor: pointer;
+	text-align: center;
+	color: #000000;
+}
+
 #resinfo {
 	border-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: red;
 	clear: both;
 	padding: 10px;
-	margin-top: 10px;
+	margin: 20px;
 	line-height: 20px;
+	background-color: #FFE4B5;
+	color: #B22222;
 }
 
 #menupanel {
 	border-top-left-radius: 10px; 
 	border-top-right-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: #E0FFFF;
+	background-color: #B8860B;
 	padding: 20px 10px 0 10px;
 	margin: -57px 10px 0 10px;
-	width: 30%;
+	width: 35%;
 	height: 47px;
 	float: right;
-	color: #000000;
+	color: #FFFFFF;
+}
+
+#menupanel a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#menupanel a:hover {
+	color: #00FF7F;
+	text-decoration: none;
 }
 
 #toppanel {
@@ -169,7 +234,7 @@ body {
 #leftpanel {
 	border-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: #6495ED;
+	background-color: #8B4513;
 	padding: 10px;
 	margin: 10px 0 10px 10px;
 	width: 30%;
@@ -285,7 +350,7 @@ body {
 #mysites {
 	border-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: #008B8B;
+	background-color: #8B4513;
 	padding: 10px;
 	margin: 10px 0 0 20px;
 	width: 28%;
@@ -295,23 +360,25 @@ body {
 #mytasks {
 	border-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: #8B4513;
+	background-color: #FFE4B5;
 	padding: 10px;
 	margin: 10px 20px 0 0;
 	width: 65%;
 	float: right;
+	color: #B22222;
 }
 
 #mydocuments {
 	border-radius: 10px; 
 	-moz-border-radius: 10px; 
-	background-color: #4B0082;
+	background-color: #D8BFD8;
 	padding: 10px;
 	margin: 10px 0 0 20px;
 	width: 28%;
 	float: left;
 	clear: both;
 	margin-bottom: 20px;
+	color: #000000;
 }
 
 #pagefooter {
@@ -325,6 +392,7 @@ body {
 	bottom:30px;
 	position:inherit;
 	text-align: center;
+	color: #B8860B;
 }
 
 #sitelist {
@@ -342,6 +410,11 @@ body {
 	text-decoration:none;
 }
 
+#sitelist li a:hover {
+	color: #00FF7F;
+	text-decoration: none;
+}
+
 #tasklist {
 	list-style-type: none;
 	padding: 0px;
@@ -355,4 +428,49 @@ body {
 #tasklist li a {
 	color: #FFFFFF;
 	text-decoration:none;
+}
+
+#tasklist li a:hover {
+	color: #00FF7F;
+	text-decoration: none;
+}
+
+.note a {
+	color: #B8860B;
+	text-decoration: none;
+}
+
+.note a:hover {
+	color: #00FF7F;
+	text-decoration: none;
+}
+
+#docslist a {
+	color: #800000;
+	text-decoration: none;
+}
+
+#docslist a:hover {
+	color: #00FF7F;
+	text-decoration: none;
+}
+
+#folderlist a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#folderlist a:hover {
+	color: #00FF7F;
+	text-decoration: none;
+}
+
+#breadcrumb a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#breadcrumb a:hover {
+	color: #00FF7F;
+	text-decoration: none;
 }

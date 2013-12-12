@@ -11,18 +11,35 @@
 </head>
 
 <body>
+	<header id="pageheader">
+		<h2>Comprador</h2>
+	</header>
 	<div id="connectInfo" width="50%">
-		<h2>Connect to your Alfresco Server</h2>
-		<div class="note">Put your Alfresco Server CMIS ATOMPUB Url and User Credential below.</div>
-		<table id="connectDet" border="0" align="left" cellspacing="10" style="margin-left: 20px" width="100%">
+		<section id="header">
+			<h2>Connect to your Alfresco Server</h2>
+			<div class="note">Put your Alfresco Server CMIS ATOMPUB Url and User Credential below.</div>
+		</section>
+		<table id="connectDet" border="0" align="left" cellspacing="10" style="margin: 10px 0 10px 30px" width="100%">
 			<tr><td align="left">Alfresco Server Url<br/><input type="url" id="serverUrl" size="30px" value="http://localhost:8080/alfresco" />/cmisatom</td></tr>
 			<tr><td align="left">User Name<br/><input type="text" id="userName" value="admin" /></td></tr>
 			<tr><td align="left">Password<br/><input type="password" id="password" value="admin" /></td></tr>
-			<tr><td align="left"><button type="button" onclick="loginToServer();">Connect Me !!!</button></td></tr>
+			<tr><td align="left"><div class="btn" id="loginbutton">Connect Me !!!</div></td></tr>
 		</table>
 		<div id="resinfo" style="display: none"></div>
-		<button type="button" onclick="window.location='repository.html'" id="getmein" style="display: none; margin-top: 10px">Okay, Get Me In</button>
+		<div class="btn" id="getmein" style="display: none; margin-top: 10px; margin-left: 10px">Okay, Get Me In</button>
 	</div>
+
+	<script>
+		$(document).ready(function () {
+			abandonConnection(true);
+			$('#loginbutton').bind('click', function(){
+				loginToServer();
+			});
+			$('#getmein').bind('click', function(){
+				window.location = "repository.html";
+			});
+		});
+	</script>
 </body>
 
 </html>
