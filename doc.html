@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Comprador - The Alfresco Client</title>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css" />
@@ -16,6 +16,7 @@
 	<script type="text/javascript" src="js/lib/jquery.dataTables.js"></script>
     <script type="text/javascript" src="js/lib/jquery.center.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
+	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -31,22 +32,10 @@
 	<section id="menupanel"></section>
 	
 	<div id="mainwindow" width="100%">
-		<section id="toppanel"><h3 id="docheader"></h3></section>
-		<section id="previewpanel">
-			<embed type="application/x-shockwave-flash" id="flashvidpreview" width="100%" height="600px" />
-		</section>
-		<section id="propertiespanel">
-			<section id="cmispropertiespanel">
-				<h4>CMIS Properties</h4>
-				<table id="docproperties"></table>
-			</section>
-			<section id="alfpropertiespanel">
-				<h4>Alfresco Properties</h4>
-				<table id="docalfproperties"></table>
-			</section>
-			<section id="aspectspanel">
-				<h4>Alfresco Aspects</h4>
-				<table id="docalfaspects"></table>
+		<section id="toppanel"><h3 id="docheader" style="float:left; width: 70%"></h3><p style="float:right"><a id="goback"><img src="images/back-icon.png" style="width: 80px; height: auto; border: 0"/></a></p></section>
+		<section id="docpanel">
+			<section id="previewpanel">
+				<embed type="application/x-shockwave-flash" id="flashvidpreview" width="100%" height="600px" src="" />
 			</section>
 			<section id="actionspanel">
 				<table id="docactions">
@@ -55,23 +44,64 @@
 					<tr><td><img src="images/upload.png" class="action-icon" /></td><td>Upload new version</td></tr>
 				</table>
 			</section>
+		</section>
+		<section id="propertiespanel">
+			<section id="cmispropertiespanel">
+				<header id="propheader">
+					<h4>CMIS Properties</h4>
+				</header>
+				<div style="padding:10px"><table id="docproperties"></table></div>
+			</section>
+			<section id="alfpropertiespanel">
+				<header id="propheader">
+					<h4>Alfresco Properties</h4>
+				</header>
+				<div style="padding:10px"><table id="docalfproperties"></table></div>
+			</section>
+			<section id="aspectspanel">
+				<header id="propheader">
+					<h4>Alfresco Aspects</h4>
+				</header>
+				<div style="padding:10px"><table id="docalfaspects"></table></div>
+			</section>
 			<section id="versionspanel">
-				<h4>Document Versions</h4>
-				<ul id="docversions"></ul>
+				<header id="propheader">
+					<h4>Document Versions</h4>
+				</header>
+				<div style="padding:10px"><ul id="docversions"></ul></div>
 			</section>
 		</section>
 		<footer id="pagefooter">
 			<header>
 				<h2>Comprador</h2>
 				<p class="note">The Alfresco CMIS HTML5 Client&nbsp;|&nbsp;
-				<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;
-				&copy&nbsp;Snig Bhaumik 2013</p>
+				<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;&copy;&nbsp;Snig Bhaumik 2013</p>
 			</header>
 		</footer>
 	</div>
 
+	<section id="preferences" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Preferences</h2>
+			<p class="note">Utilities for you.</p>
+		</section>
+		<fieldset class="searchoptions" style="margin: 30px 65px 0 65px">
+			<legend>Comprador Theme</legend>
+			<input type="radio" id="themeblue" class="themeoption" name="themeoption" value="B" /><label for="themeblue">I prefer Blue</label><br/>
+			<input type="radio" id="themegreen" class="themeoption" name="themeoption" value="G" /><label for="themegreen">Green suits me</label><br/>
+			<input type="radio" id="themebrown" class="themeoption" name="themeoption" value="W" /><label for="themebrown">Let's try Brown</label><br/>
+			<input type="radio" id="themedefault" class="themeoption" name="themeoption" value="D" /><label for="themedefault">Default is Okay</label><br/>
+		</fieldset>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Comprador Cache</legend>
+			<div class="btn" id="cachebutton" style="width: 92%">Clear Cache</div>
+		</fieldset>
+		<button onclick="$.magnificPopup.close()" style="margin: 45px 10px 0 10px; width: 96%">Close</button>
+	</section>
+
 	<script>
 		$(document).ready(function () {
+			loadStyle();
 			buildMenu();
 			showDocument();
 		});

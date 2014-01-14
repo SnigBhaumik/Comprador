@@ -3,12 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Comprador - The Alfresco Client</title>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
-	<link rel="stylesheet" type="text/css" href="css/tree.css" />
+	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
 
 	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
+	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -25,40 +27,57 @@
 
 	<div id="mainwindow" width="100%">
 		<aside id="mytasks">
-			<header>
+			<header id="taskheader">
 				<h2>Tasks</h2>
-				<p class="note">Following are the Tasks allocated to you.</p>
+				<p class="note">Tasks allocated to you.</p>
 			</header>
 			<ul id="tasklist"></ul>
 		</aside>
 		<section id="mysites">
-			<header>
+			<header id="siteheader">
 				<h2>Sites</h2>
-				<p class="note">Following are the Sites you are member of.</p>
+				<p class="note">Sites you are member of.</p>
 			</header>
 			<ul id="sitelist"></ul>
 		</section>
 		<section id="mydocuments">
-			<header>
+			<header id="mydocheader">
 				<h2>Documents</h2>
-				<p class="note">Following are the Documents you are working on.</p>
+				<p class="note">Documents you are working on.</p>
 			</header>
+			<ul id="mydoclist"></ul>
 		</section>
-		<footer id="pagefooter">
-			<header>
-				<h2>Comprador</h2>
-				<p class="note">The Alfresco CMIS HTML5 Client&nbsp;|&nbsp;
-				<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;
-				&copy&nbsp;Snig Bhaumik 2013</p>
-			</header>
-		</footer>
+		<footer id="pagefooter"></footer>
 	</div>
+
+	<section id="preferences" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Preferences</h2>
+			<p class="note">Utilities for you.</p>
+		</section>
+		<fieldset class="searchoptions" style="margin: 30px 65px 0 65px">
+			<legend>Comprador Theme</legend>
+			<input type="radio" id="themeblue" class="themeoption" name="themeoption" value="B" /><label for="themeblue">I prefer Blue</label><br/>
+			<input type="radio" id="themegreen" class="themeoption" name="themeoption" value="G" /><label for="themegreen">Green suits me</label><br/>
+			<input type="radio" id="themebrown" class="themeoption" name="themeoption" value="W" /><label for="themebrown">Let's try Brown</label><br/>
+			<input type="radio" id="themedefault" class="themeoption" name="themeoption" value="D" /><label for="themedefault">Default is Okay</label><br/>
+		</fieldset>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Comprador Cache</legend>
+			<div class="btn" id="cachebutton" style="width: 92%">Clear Cache</div>
+		</fieldset>
+		<button onclick="$.magnificPopup.close()" style="margin: 45px 10px 0 10px; width: 96%">Close</button>
+	</section>
 
 	<script>
 		$(document).ready(function () {
+			loadStyle();
 			buildMenu();
 			getSites();
 			getTasks();
+			$('.themeoption').bind('click', function(){
+				setCompradorTheme();
+			});
 		});
 	</script>
 </body>

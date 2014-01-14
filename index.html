@@ -10,10 +10,12 @@
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
+<!-- <body style="background:#ffffff url('images/application_footer.png') no-repeat 7% -80%; background-size: 300px 300px"> -->
 <body>
-	<header id="pageheader">
+ 	<!-- <header id="pageheader">
 		<h2>Comprador</h2>
-	</header>
+	</header> -->
+	<img src="images/application.png" style="position: absolute; opacity:0.04; margin-top: 100px;" />
 	<div id="connectInfo" width="50%">
 		<section id="header">
 			<h2>Connect to your Alfresco Server</h2>
@@ -36,7 +38,7 @@
 				loginToServer();
 			});
 			$('#getmein').bind('click', function(){
-				window.location = "repository.html";
+				window.location = "landing.html";
 			});
 		});
 	</script>

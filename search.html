@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Comprador - The Alfresco Client</title>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery.msg.css" />
@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
     <script type="text/javascript" src="js/lib/jquery.center.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
+	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -26,38 +27,97 @@
 		<h2>Comprador</h2>
 	</header>
 
-	<section id="menupanel">something</section>
+	<section id="menupanel"></section>
 
 	<div id="mainwindow" width="100%">
 		<section id="toppanel">
-			<header><h3 id="searchheader">Search Repository</h3></header>
-			<p class="searchsummary"></p>
+			<header class="searchtoppanel"><h3 id="searchheader">Search Repository</h3>
+			<p class="searchsummary"></p></header>
 		</section>
 		<section id="leftpanel">
-			<input type="search" id="searchbox" />
 			<fieldset class="searchoptions">
 				<legend>Search What?</legend>
+				<input type="text" list="recentterms" id="searchbox" /><br/>&nbsp;<br/>
 				<input type="radio" id="searchdoc" class="searchoption" name="searchoption" checked value="D" /><label for="searchdoc">Documents</label><br/>
 				<input type="radio" id="searchfolder" class="searchoption" name="searchoption" value="F" /><label for="searchfolder">Folders</label><br/>
+				<div class="btn" id="searchbutton" style="width: 92%">Search</div>
+				<datalist id="recentterms"></datalist>
+			</fieldset>
+			<fieldset class="searchoptions">
+				<legend>CMIS Custom Query</legend>
+				<textarea id="querybox" rows="5" cols="36" wrap="soft"></textarea>
+				<a class="helpicon" href="#helpcmis" title="CMIS Query Tips"></a>
+				<div class="btn" id="querybutton" style="width: 92%">Execute Query</div>
 			</fieldset>
 		</section>
 		<section id="rightpanel">
 			<table id="docslist" width="100%" cellspacing="5" cellspacing="10"></table>
 		</section>
-		<footer id="pagefooter">
-			<header>
-				<h2>Comprador</h2>
-				<p class="note">The Alfresco CMIS HTML5 Client&nbsp;|&nbsp;
-				<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;
-				&copy&nbsp;Snig Bhaumik 2013</p>
-			</header>
-		</footer>
+		<footer id="pagefooter"></footer>
 	</div>
+
+	<section id="helpcmis" class="white-popup mfp-hide">
+		<section id="helpheader">
+			<h2>Sample CMIS Queries</h2>
+			<p class="note">Click on the Query to use it.</p>
+		</section>
+		<p class="note">
+			<ul class="helpnote">
+				<li class="helpline">SELECT * FROM cmis:document<br/><i>selects all documents, returns all properties</i></li>
+				<li class="helpline">SELECT * FROM cmis:folder<br/><i>selects all folders, returns all properties</i></li>
+				<li class="helpline">SELECT * FROM cmis:document WHERE cmis:name LIKE '%myname%'<br/><i>selects all documents with name includes 'myname', returns all properties</i></li>
+				<li class="helpline">SELECT * FROM cmis:folder WHERE cmis:name IN ('myname1', 'myname2', 'myname3')<br/><i>selects all folders with name 'myname1' or 'myname2' or 'myname3', returns all properties</i></li>
+				<li class="helpline">SELECT * FROM cmis:document WHERE CONTAINS('mycontent')<br/><i>selects all documents having 'mycontent' keyword in the content, returns all properties</i></li>
+				<li class="helpline">SELECT cmis:objectId, cmis:createdBy, cmis:creationDate FROM cmis:document<br/><i>selects all documents, returns Object id, Creation date and Created by columns</i></li>
+			</ul>
+			<p style="margin: 50px 10px 20px 10px">Please refer to <a href="http://wiki.alfresco.com/wiki/CMIS_Query_Language" target="_blank">Alfresco Wiki</a> for detailed Alfresco CMIS Query Language.</p>
+		</p>
+		<button onclick="$.magnificPopup.close()" style="margin: 0 10px 0 10px; width: 98%">Close</button>
+	</section>
+
+	<section id="preferences" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Preferences</h2>
+			<p class="note">Utilities for you.</p>
+		</section>
+		<fieldset class="searchoptions" style="margin: 30px 65px 0 65px">
+			<legend>Comprador Theme</legend>
+			<input type="radio" id="themeblue" class="themeoption" name="themeoption" value="B" /><label for="themeblue">I prefer Blue</label><br/>
+			<input type="radio" id="themegreen" class="themeoption" name="themeoption" value="G" /><label for="themegreen">Green suits me</label><br/>
+			<input type="radio" id="themebrown" class="themeoption" name="themeoption" value="W" /><label for="themebrown">Let's try Brown</label><br/>
+			<input type="radio" id="themedefault" class="themeoption" name="themeoption" value="D" /><label for="themedefault">Default is Okay</label><br/>
+		</fieldset>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Comprador Cache</legend>
+			<div class="btn" id="cachebutton" style="width: 92%">Clear Cache</div>
+		</fieldset>
+		<button onclick="$.magnificPopup.close()" style="margin: 45px 10px 0 10px; width: 96%">Close</button>
+	</section>
+
 
 	<script>
 		$(document).ready(function () {
+			loadStyle();
 			buildMenu();
 			search();
+			$('#querybutton').bind('click', function() {
+				executeQuery($('#querybox').val());
+			});
+			$('#searchbutton').bind('click', function() {
+				search($('#searchbox').val());
+			});
+			$('#cachebutton').bind('click', function() {
+				clearAppCache();
+			});
+			$('.helpicon').magnificPopup({
+				type: 'inline',
+				src: '#helpcmis',
+				mainClass: 'mfp-fade'
+			});
+			$('.helpline').bind('click', function() {
+				$("#querybox").val(this.firstChild.textContent);
+				$.magnificPopup.close();
+			});
 		});
 	</script>
 

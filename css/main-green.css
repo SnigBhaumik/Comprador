@@ -1,0 +1,173 @@
+
+button {
+	background-color: #556B2F;
+	color: #FFFFFF;
+}
+
+#mainwindow {
+	background-color: #66CDAA;
+}
+
+#menupanel {
+	background-color: #66CDAA;
+}
+
+#toppanel {
+	background-color: #808000;
+}
+
+#leftpanel {
+	background-color: #008080;
+}
+
+#rightpanel {
+	background-color: #7FFFD4;
+}
+
+#propheader {
+	background-color: #3CB371;
+	color: #FFFFFF;
+}
+
+#cmispropertiespanel {
+	background-color: #7FFFD4;
+}
+
+#alfpropertiespanel {
+	background-color: #7FFFD4;
+}
+
+#aspectspanel {
+	background-color: #7FFFD4;
+}
+
+#versionspanel {
+	background-color: #7FFFD4;
+}
+
+#previewpanel {
+	background-color: #2E8B57;
+}
+
+#actionspanel {
+	background-color: #2E8B57;
+	color: #FFFFFF;
+}
+
+#mytasks {
+	background-color: #7FFFD4;
+	color: #006400;
+}
+
+#taskheader {
+	background-color: #008B8B;
+	color: #FFFFFF;
+}
+
+#mysites {
+	background-color: #2E8B57;
+}
+
+#siteheader {
+	background-color: #90EE90;
+	color: #000000;
+}
+
+#mydocuments {
+	background-color: #008080;
+}
+
+#mydocheader {
+	background-color: #00FF7F;
+	color: #000000;
+}
+
+.searchoptions {
+	background-color: #66CDAA;
+	color: #000000;
+}
+
+#preferences {
+	background-color: #008080;
+	color: #FFFFFF;
+}
+
+#newfolderdialog {
+	background-color: #008080;
+	color: #FFFFFF;
+}
+
+#newtextdialog {
+	background-color: #008080;
+	color: #FFFFFF;
+}
+
+#prefheader {
+	background-color: #90EE90;
+	color: #000000;
+}
+
+#helpcmis {
+	background-color: #008080;
+	color: #FFFFFF;
+}
+
+#helpheader {
+	background-color: #90EE90;
+	color: #000000;
+}
+
+#docslist tr:nth-child(even) td {
+	background-color: #00CED1;
+}
+
+#pagefooter {
+	background-color: #AFEEEE;
+	color: #006400;
+}
+
+.note a {
+	color: #006400;
+}
+
+.note a:hover {
+	color: #32CD32;
+}
+
+#breadcrumb a:hover {
+	color: #32CD32;
+}
+
+#folderlist a:hover {
+	color: #32CD32;
+}
+
+#docslist a:hover {
+	color: #32CD32;
+}
+
+#tasklist li a:hover {
+	color: #32CD32;
+}
+
+#sitelist li a:hover {
+	color: #32CD32;
+}
+
+#menupanel a:hover {
+	color: #32CD32;
+}
+
+#pagination {
+	background-color: #2E8B57;
+	color: #FFFFFF;
+}
+
+#foldertoolbar {
+	color: #006400;
+	background: linear-gradient(#2E8B57, #90EE90);
+}
+
+#foldertoolbar ul li a {
+	color: #006400;
+}
