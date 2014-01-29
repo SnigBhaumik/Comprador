@@ -1,27 +1,12 @@
 
-sessionStorage.alfUrl = "";
-//sessionStorage.histry = "";
-//sessionStorage.currfolder = "root";
+//var canCreateFolder = false;
+//var canCreateDocument = false;
+
 if (!sessionStorage.recentTerms)
 {
 	sessionStorage.recentTerms = "";
 }
 var brdpath = new Array();
-
-(function($) {
-    $.QueryString = (function(a) {
-        if (a == "") return {};
-        var b = {};
-        for (var i = 0; i < a.length; ++i)
-        {
-            var p=a[i].split('=');
-            if (p.length != 2) continue;
-            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-        }
-        return b;
-    }) (window.location.search.substr(1).split('&'))
-})(jQuery);
-
 
 (function ($) {
 	$.uniqueArray = (function (list) {
@@ -31,6 +16,22 @@ var brdpath = new Array();
 		});
 		return result;
 	})
+})(jQuery);
+
+(function ($) {
+	$.toReadableDate = (function (str) {
+		var dt = new Date(str.substring(0, str.length - 6));
+		return dt.toLocaleString();
+	})
+})(jQuery);
+
+(function ($) {
+	$.toBoolean = (function (str) {
+		switch(str.toLowerCase()) {
+			case "true": case "yes": case "1": return true;
+			case "false": case "no": case "0": case null: return false;
+			default: return false;
+	}})
 })(jQuery);
 
 
@@ -49,9 +50,12 @@ function extractNodeRef(noderef) {
 	return ar[ar.length-1];
 }
 
+String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+}
 
-function loadStyle()
-{
+function loadStyle() {
 	var href = "css/main.css";
 	var titl = "defaultstyle";
 	switch(sessionStorage.css)
@@ -68,6 +72,10 @@ function loadStyle()
 			href = "css/main-brown.css";
 			titl = "brownstyle";
 			break;
+		case "P":
+			href = "css/main-prof.css";
+			titl = "profstyle";
+			break;
 		default:
 			href = "css/main.css";
 			titl = "defaultstyle";
@@ -82,23 +90,28 @@ function loadStyle()
 }
 
 function buildMenu() {
-	$("#menupanel").html('<a class="repositorylink" href="repository.html">Repository</a>&nbsp;&nbsp;<a class="dashboardlink" href="landing.html">Dashboard</a>&nbsp;&nbsp;<a class="preferenceslink" href="#preferences">Preferences</a>&nbsp;&nbsp;<a class="disconnectlink" href="index.html">Disconnect</a><input type="search" class="searchbox" style="float:right; margin-top: -5px" />');
-	$("#pagefooter").html('<header><h2>Comprador</h2><p class="note">The Alfresco CMIS HTML5 CSS3 Client&nbsp;|&nbsp;<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;&copy;&nbsp;Snig Bhaumik 2013</p></header>');
+	$("#menupanel").html('<a class="userlink" target="_blank">User</a>&nbsp;&nbsp;<a class="browserlink" href="browser.html">Browser</a>&nbsp;&nbsp;<a class="dashboardlink" href="landing.html">Dashboard</a>&nbsp;&nbsp;<a class="reposlink" href="repos.html">Repository</a>&nbsp;&nbsp;<a class="preferenceslink" href="#preferences">Preferences</a>&nbsp;&nbsp;<a class="disconnectlink" href="index.html">Disconnect</a><input type="search" class="searchbox" style="float:right; margin-top: -5px" />');
+	$("#pagefooter").html('<header><h2>Comprador</h2><p class="note">The Alfresco CMIS HTML5 CSS3 jQuery Client&nbsp;|&nbsp;<a href="https://github.com/SnigBhaumik/Comprador" target="_blank"><img src="images/github.png" height="24px" width="24px" style="vertical-align: middle; border: 0">Fork me on Github</a>&nbsp;|&nbsp;&copy;&nbsp;Snig Bhaumik 2014</p></header>');
 
 	$(".searchbox").keypress(function(event) {
-		if (event.which == 13)
-		{
-			if (event.target.value == "")
-			{
+		if (event.which == 13) {
+			if (event.target.value == "") {
 				alert("Please enter search term.");
 			}
-			else
-			{
+			else {
 				window.location = "search.html?kw=" + event.target.value;
 			}
 		}
 	});
-	
+
+	$(".userlink").html("hello " + sessionStorage.user);
+	if (sessionStorage.shareurl != "") {
+		$(".userlink").attr("href", sessionStorage.shareurl + "/page/user/" + sessionStorage.user + "/profile");
+	}
+	else {
+		$(".userlink").removeAttr("href");
+	}
+
 	$(".dashboardlink").bind("click", function() {
 		setHistory("L");
 	});
@@ -112,14 +125,11 @@ function buildMenu() {
 	});
 
 	$("#searchbox").keypress(function(event) {
-		if (event.which == 13)
-		{
-			if (event.target.value == "")
-			{
+		if (event.which == 13) {
+			if (event.target.value == "") {
 				alert("Please enter search term.");
 			}
-			else
-			{
+			else {
 				search(event.target.value);
 			}
 		}
@@ -135,6 +145,23 @@ function buildMenu() {
 	$('#cachebutton').bind('click', function(){
 		clearAppCache();
 	});
+
+	$('#themeoptions').tipsy({
+		gravity: 'nw',
+		fade: true,
+		fallback: 'In some browsers you may have to refresh the page to apply the new theme.'
+	});
+	$('#sharelink').val(sessionStorage.shareurl);
+	$('#setsharelink').tipsy({
+		gravity: 'sw',
+		fade: true,
+		fallback: 'Clearing this Url will disable all Alfresco Share links in Comprador.'
+	});
+	$('#cachebutton').tipsy({
+		gravity: 'sw',
+		fade: true,
+		fallback: 'Clears the following:'
+	});
 }
 
 function buildToolbar() {
@@ -143,28 +170,74 @@ function buildToolbar() {
 		src: '#newfolderdialog',
 		mainClass: 'mfp-fade',
 		modal : true, 
-		focus : 'input'
-	});
+		focus : 'input',
+		disableOn : function() {
+			return canCreateFolder;
+		},
+		callbacks: {
+			open: function() {
+				$("#foldername").val("");
+				$("#folderdesc").val("");
+			}
+		}
+	}); 
 	$('.newdocument').magnificPopup({
 		type: 'inline',
 		src: '#newdocdialog',
 		mainClass: 'mfp-fade',
 		modal : true, 
-		focus : 'input'
+		focus : 'input',
+		disableOn : function() {
+			return canCreateDocument;
+		},
+		callbacks: {
+			open: function() {
+				$("#fileToUpload").val("");
+				$("#filetitle").val("");
+				$("#filedesc").val("");
+				$("#filedropzone").css("border-style", "outset");
+				$("#fileDetails").html("Please select File.");
+				$("#uploadfile").attr('disabled','disabled');
+			}
+		}
 	});
 	$('.newtxtdoc').magnificPopup({
 		type: 'inline',
 		src: '#newtextdialog',
 		mainClass: 'mfp-fade',
 		modal : true, 
-		focus : 'input'
+		focus : 'input',
+		disableOn : function() {
+			return canCreateDocument;
+		},
+		callbacks: {
+			open: function() {
+				$("#textfilename").val("");
+				$("#textcontent").val("");
+			}
+		}
 	});
 	$('.newhtmldoc').magnificPopup({
 		type: 'inline',
 		src: '#newhtmldialog',
 		mainClass: 'mfp-fade',
 		modal : true, 
-		focus : 'input'
+		focus : 'input',
+		disableOn : function() {
+			return canCreateDocument;
+		},
+		callbacks: {
+			open: function() {
+				$("#htmlfilename").val("");
+				$(".jqte_editor").html("");
+			}
+		}
+	});
+	$('.folderinfo').magnificPopup({
+		type: 'inline',
+		src: '#folderinfodialog',
+		mainClass: 'mfp-fade',
+		modal : true
 	});
 
 	$('.newfolder').tipsy({
@@ -187,8 +260,23 @@ function buildToolbar() {
 		fade: true,
 		fallback: 'Author a new HTML Document'
 	});
+	$('.folderinfo').tipsy({
+		gravity: 'se',
+		fade: true,
+		fallback: 'Folder Information'
+	});
 
 	$(".editor").jqte();
+	$(".deletefolder").bind("click", function() {
+		deleteObject(sessionStorage.currfolder, "F");
+	});
+	$(".updatefolderproperties").bind("click", function() {
+		$('.folderproperties').css('display', $('.folderproperties').css('display') == "none" ? "block" : "none");
+		$('#fname').focus();
+	});
+	$("#updatepropertiesbutton").bind("click", function() {
+		updateObjectProperties(sessionStorage.currfolder, "F");
+	});
 }
 
 function checkUser() {
@@ -204,39 +292,24 @@ function checkBrowser() {
 	// TODO.
 }
 
+function setAppUrl() {
+	var url = $.url();
+	var port = '';
+	if (url.attr('port'))
+	{
+		port = ':' + url.attr('port');
+	}
+	var aurl = url.attr('protocol') + '://' + url.attr('host') + port;
+	$('#serverUrl').val(aurl + '/alfresco');
+	sessionStorage.shareurl = aurl + '/share';
+}
+
 function setAuthenticationTicket() {
 	var encode = window.btoa || Base64.encode;
 	$.ajaxSetup({
 		beforeSend: function (jqXHR, settings) {
 			var auth = "Basic " + encode('ROLE_TICKET:' + sessionStorage.ticket);
 			jqXHR.setRequestHeader("Authorization", auth);
-			}
-	});
-}
-
-window.test = function(d) {
-	alert(d);
-}
-
-function loginToServer_remote() {
-	sessionStorage.alfurl = $('#serverUrl').val();
-	$.ajax({
-		url: sessionStorage.alfurl + '/service/api/login.json?u=' + $('#userName').val() + '&pw=' + $('#password').val(),
-		contentType: "application/json; charset=utf-8",
-		dataType: 'jsonp',
-		jsonpCallback: 'test',
-		jsonp: 'alf_callback',
-
-		//success: test,
-
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert(errorThrown);
-		},
-
-		statusCode: {
-			403: function() {
-				abandonConnection();
-			}
 		}
 	});
 }
@@ -274,14 +347,12 @@ function abandonConnection(logout) {
 	sessionStorage.ticket = null;
 	sessionStorage.user = null;
 
-	if (logout)
-	{
+	if (logout) {
 		$("#resinfo").html("");
 		$("#resinfo").css("display", "none");
 		$("#getmein").css("display", "none");
 	}
-	else
-	{
+	else {
 		var resinfo = "";
 		resinfo = "<br/><strong>Unable to connect to the specified Respository.</strong>";
 		resinfo += "<br/><strong>Some of the things you can check.</strong>";
@@ -319,7 +390,7 @@ function initiateCMIS() {
 }
 
 function showRootFolders() {
-	var docroot = $.QueryString["docroot"];
+	var docroot = $.url().param("docroot");
 	if (docroot && docroot != "")
 	{
 		if (docroot != "root")
@@ -393,7 +464,67 @@ function showFolders(objid) {
 
 			brdpath = new Array();
 			showBreadcrumb(objid);
+			applyFolderAllowableActions(objid);
 			sessionStorage.currfolder = objid;
+		}})
+}
+
+function applyFolderAllowableActions(objid) {
+	$.getFeed ({
+		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(objid) + '?includeAllowableActions=true',
+		success : function (feed) {
+			var item = feed.item;
+			var cobj = item.cmisobject;
+
+			var finfo = "";
+			finfo += "<b>Name:</b> " + cobj.name + "<br/>";
+			finfo += "<b>Title:</b> " + item.title + "<br/>";
+			finfo += "<b>Description:</b> " + item.description + "</br/>";
+			finfo += "<b>Created by</b> " + cobj.createdBy + " on " + $.toReadableDate(cobj.creationDate) + "<br/>";
+			finfo += "<b>Last Updated by</b> " + cobj.lastModifiedBy + " on " + $.toReadableDate(cobj.lastModificationDate) + "<br/>";
+			finfo += "<b>Repository Node Ref:</b> " + cobj.objectId + "<br/>";
+			finfo += "<b>Folder Path:</b> " + cobj.path + "<br/><hr/>";
+
+			finfo += "You " + (cobj.canCreateFolder ? "can" : "cannot") + " create sub-folders.<br/>";
+			finfo += "You " + (cobj.canCreateDocument ? "can" : "cannot") + " create documents here.<br/>";
+			finfo += "You " + (cobj.canUpdateProperties ? "can" : "cannot") + " update properties of this folder.<br/>";
+			finfo += "You " + (cobj.canMoveObject ? "can" : "cannot") + " move this folder.<br/>";
+			finfo += "You " + (cobj.canDeleteObject ? "can" : "cannot") + " delete this folder.<br/><hr/>";
+
+			finfo += "<b>Tags:</b> <br/>";
+			finfo += "<b>Categories:</b> <br/>";
+
+			$('.finfo').html(finfo);
+			$('#fname').val(cobj.name);
+			$('#ftitle').val(item.title);
+			$('#fdesc').val(item.description);
+			sessionStorage.parentFolder = cobj.parentId;
+
+			if (cobj.canCreateFolder) {
+				//$(".newfolder").fadeTo('fast', 1).removeAttr('disabled');
+				//$(".newfolder").attr('href', '#newfolderdialog');
+				$(".newfolder").fadeTo('fast', 1).attr('href', '#newfolderdialog');
+				canCreateFolder = true;
+			}
+			else {
+				//$(".newfolder").fadeTo('fast', 0.3).prop('disabled','disabled');
+				//$(".newfolder").removeAttr('href');
+				$(".newfolder").fadeTo('fast', 0.3).removeAttr('href');
+				canCreateFolder = false;
+			}
+
+			if (cobj.canCreateDocument) {	
+				$(".newdocument").fadeTo('fast', 1).attr('href', '#newdocdialog');
+				$(".newtxtdoc").fadeTo('fast', 1).attr('href', '#newtextdialog');
+				$(".newhtmldoc").fadeTo('fast', 1).attr('href', '#newhtmldialog');
+				canCreateDocument = true;
+			}
+			else {
+				$(".newdocument").fadeTo('fast', 0.3).removeAttr('href');
+				$(".newtxtdoc").fadeTo('fast', 0.3).removeAttr('href');
+				$(".newhtmldoc").fadeTo('fast', 0.3).removeAttr('href');
+				canCreateDocument = false;
+			}
 		}})
 }
 
@@ -416,7 +547,6 @@ function showBreadcrumb(objid) {
 			}
 			return tt;
 		}})
-
 }
 
 function getSites() {
@@ -426,9 +556,9 @@ function getSites() {
 		for (var p in data)
 		{
 			var st = data[p];
-			var txt = "<li><a href='repository.html?docroot=" + st.node + "'><h4><img src='images/sites-icon.png' class='folder-icon'>" + st.title + "</h4></a>";
+			var txt = "<li><a href='browser.html?docroot=" + st.node + "'><h4><img src='images/sites-icon.png' class='folder-icon'>" + st.title + "</h4></a>";
 			txt += "<div style='margin-left: 21px; margin-top: -10px'>" + st.visibility + " Site.";
-			txt += "<br/><div id='nomember" + st.shortName + "' style='white-space: nowrap'></div></div></li>";
+			txt += "<br/><div id='nomember" + st.shortName + "'></div></div></li>";
 			sites += txt;
 			getSiteMembers(st.shortName);
 		}
@@ -439,12 +569,13 @@ function getSites() {
 function getSiteMembers(sitename) {
 	$.getJSON(sessionStorage.alfurl + '/service/api/sites/' + sitename + '/memberships', function(data) {
 		$("#nomember" + sitename).html(data.length + " Member(s).");
-		var m = "";
+		var m = "<div style='white-space: nowrap'>";
 		for (i in data) {
 			m += data[i].authority.firstName + " " + data[i].authority.lastName + " (" + data[i].role + ")<br />";
 		}
+		m += "</div>";
 		$("#nomember" + sitename).tipsy({
-			gravity: 'w',
+			gravity: 'sw',
 			fade: true,
 			fallback: m,
 			html: true
@@ -459,20 +590,59 @@ function getTasks() {
 		for (var p in data.tasks)
 		{
 			var tk = data.tasks[p];
-			var txt = "<li><h4><img src='images/tasks-icon.png' class='folder-icon'>" + tk.description + "</h4>";
-			txt += "<p style='margin-left: 21px; margin-top: -10px'>Should be completed by " + tk.dueDate + ".";
+			var t = tk.description != "" ? tk.description : tk.type;
+			var dt = new Date(tk.dueDate.substring(0, 10));
+			var txt = "";
+			if (sessionStorage.shareurl != "") {
+				txt += "<li><h4><img src='images/tasks-icon.png' class='folder-icon'><a href='" + sessionStorage.shareurl + "/page/task-edit?taskId=" + tk.id + "&referrer=tasks' target='_blank'>" + t + "</a></h4>";
+			}
+			else {
+				txt += "<li><h4><img src='images/tasks-icon.png' class='folder-icon'>" + t + "</h4>";
+			}
+			txt += "<p style='margin-left: 21px; margin-top: -10px'>Should be completed by " + dt.toDateString() + ".";
 			txt += "<br/>Task " + tk.status + ".</p>";
-			txt += "<p style='margin-left: 21px; margin-top: -5px'><strong>Associated Documents</strong>";
-			for (var d in tk.resources)
-			{
-				var dc = tk.resources[d];
-				txt += "<br/><a href='doc.html?docid=" + dc.nodeRef + "&docname=" + dc.displayName + "'><img src='" + sessionStorage.alfurl + dc.icon + "' class='folder-icon'>" + dc.displayName + "</a>";
+			if (tk.resources.length <= 0) {
+			}
+			else {
+				txt += "<p style='margin-left: 21px; margin-top: -5px'><strong>Associated Documents</strong>";
+				for (var d in tk.resources)
+				{
+					var dc = tk.resources[d];
+					txt += "<br/><a href='doc.html?docid=" + dc.nodeRef + "&docname=" + dc.displayName + "'><img src='" + sessionStorage.alfurl + dc.icon + "' class='folder-icon'>" + dc.displayName + "</a>";
+				}
 			}
 			txt += "</p></li>";
 			tasks += txt;
 		}
 		$("#tasklist").html(tasks);
 	})
+}
+
+function getDocs() {
+	$.getFeed ({
+		url: sessionStorage.alfurl + '/service/cmis/checkedout',
+		success : function (feed) {
+			var files = "", filecount = 0;
+			var filelist = new Array();
+			for (var i = 0; i < feed.items.length; i++)
+			{
+				var item = feed.items[i];
+				if (item.cmisobject.baseTypeId == "cmis:folder")
+				{
+				}
+				else
+				{
+					files += "<li><a onclick='setHistory(\"L\")' href='doc.html?docid=" + item.cmisobject.objectId + "&docname=" + item.cmisobject.name + "'>" + item.cmisobject.name + "</a></li>";
+					filecount++;
+				}
+			}
+			if (filecount > 0) {
+				$("#mydoclist").html(files);
+			}
+			else {
+				$("#mydoclist").html("<li>No Files checked out by you.</li>");
+			}
+		}})
 }
 
 function buildDocTable(filelist) {
@@ -483,9 +653,9 @@ function buildDocTable(filelist) {
 			success : function (feed) {
 				var item = feed.item;
 				var tt = "<tr><td align='center'><img class='folder-icon-big' src='" + item.icon + "'></td>";
-				tt += "<td><a onclick='setHistory(\"R\")' href='doc.html?docid=" + item.cmisobject.objectId + "&docname=" + item.cmisobject.name + "' class='open-popup-link'>" + item.cmisobject.name + " (" + item.title + ")</a>";
+				tt += "<td><a onclick='setHistory(\"R\")' href='doc.html?docid=" + item.cmisobject.objectId + "&docname=" + item.cmisobject.name + "'>" + item.cmisobject.name + " (" + item.title + ")</a>";
 				tt += "<br/>" + $.bytesToSize(item.cmisobject.contentStreamLength) + ".";
-				tt += "<br/>Last modified by " + item.cmisobject.lastModifiedBy + " on " + item.cmisobject.lastModificationDate;
+				tt += "<br/>Last modified by " + item.cmisobject.lastModifiedBy + " on " + $.toReadableDate(item.cmisobject.lastModificationDate);
 				tt += "</td></tr>";
 
 				$("#docslist").append(tt);
@@ -500,8 +670,8 @@ function buildFoldTable(folderlist) {
 			success : function (feed) {
 				var item = feed.item;
 				var tt = "<tr><td align='center'><img class='folder-icon-big' src='" + item.icon + "'></td>";
-				tt += "<td><a href='repository.html?docroot=" + item.cmisobject.objectId + "'>" + item.cmisobject.name + " (" + item.title + ")</a>";
-				tt += "<br/>Last modified by " + item.cmisobject.lastModifiedBy + " on " + item.cmisobject.lastModificationDate;
+				tt += "<td><a href='browser.html?docroot=" + item.cmisobject.objectId + "'>" + item.cmisobject.name + " (" + item.title + ")</a>";
+				tt += "<br/>Last modified by " + item.cmisobject.lastModifiedBy + " on " + $.toReadableDate(item.cmisobject.lastModificationDate);
 				tt += "</td></tr>";
 
 				$("#docslist").append(tt);
@@ -509,11 +679,12 @@ function buildFoldTable(folderlist) {
 }
 
 function showDocument() {
-	var did = $.QueryString["docid"];
-	var dnm = $.QueryString["docname"];
+	var did = $.url().param("docid");
+	var dnm = $.url().param("docname");
+
 	$("#docheader").html(dnm);
 	if (sessionStorage.histry == "R") {
-		$("#goback").attr("href", "repository.html?docroot=" + sessionStorage.currfolder);
+		$("#goback").attr("href", "browser.html?docroot=" + sessionStorage.currfolder);
 	}
 	else {
 		$("#goback").attr("href", "landing.html");
@@ -522,15 +693,16 @@ function showDocument() {
 	$.msg({ bgPath : 'images/', autoUnblock : false, clickUnblock : false, content : 'Please wait, retrieving data ...' });
 
 	$.getFeed ({
-		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(did) + '?renditionFilter=alf:webpreview',
+		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(did) + '?renditionFilter=alf:webpreview&includeAllowableActions=true',
 		success : function (feed) {
 			var item = feed.item;
+			var cobj = item.cmisobject;
 
 			//$("#preview").attr("src", item.cmisobject.webpreview + "?alt_ticket=" + sessionStorage.ticket);
 			//$("#vidpreview").attr("src", item.cmisobject.webpreview + "?alt_ticket=" + sessionStorage.ticket);
-			$("#flashvidpreview").attr("src", item.cmisobject.webpreview + "?alt_ticket=" + sessionStorage.ticket);
-			$("#previewcaption").html(item.cmisobject.name);
-			buildProperties(item.cmisobject.propertiesDataCMIS, item.cmisobject.propertiesDataALF, item.cmisobject.aspectsData);
+			$("#flashvidpreview").attr("src", cobj.webpreview + "?alt_ticket=" + sessionStorage.ticket);
+			$("#previewcaption").html(cobj.name);
+			buildProperties(cobj.propertiesDataCMIS, cobj.propertiesDataALF, cobj.aspectsData);
 			showDocVersions(did);
 
 			/*for (var i=0; i<item.cmisobject.properties.length; i++ )
@@ -539,6 +711,16 @@ function showDocument() {
 				var p = x.firstChild ? x.firstChild.textContent : "<i>None</i>";
 				$("#docproperties").append(x.attributes["displayName"].nodeValue + ": " + p + ".<br/>");
 			}*/
+
+			if (cobj.canDeleteObject)	
+				$(".deletedoc").fadeTo('fast', 1).removeAttr('disabled');
+			else
+				$(".deletedoc").fadeTo('fast', 0.3).attr('disabled','disabled');
+
+			/*if (cobj.canUpdateProperties) {	
+			}*/
+			
+			
 			$.msg( 'unblock' );
 		}})
 }
@@ -583,7 +765,7 @@ function showDocVersions(did) {
 				{
 					txt += item.cmisobject.checkinComment + "<br/>";
 				}
-				txt += "on " + item.cmisobject.lastModificationDate + " by " + item.cmisobject.lastModifiedBy +"</p></li>";
+				txt += "on " + $.toReadableDate(item.cmisobject.lastModificationDate) + " by " + item.cmisobject.lastModifiedBy +"</p></li>";
 				versions += txt;
 			}
 			$("#docversions").html(versions);
@@ -594,7 +776,7 @@ function search(term) {
 	var kw = "";
 	if (!term)
 	{
-		kw = $.QueryString["kw"];
+		kw = $.url().param("kw");
 		if (kw == "")
 		{
 			return;
@@ -624,7 +806,6 @@ function search(term) {
 		$.getFeed ({
 			url: sessionStorage.alfurl + '/service/cmis/query?q=' + qry,
 			success : function (feed) {
-
 				var files = "", filecount = 0;
 				var filelist = new Array();
 				for (var i = 0; i < feed.items.length; i++) {
@@ -659,7 +840,6 @@ function search(term) {
 		$.getFeed ({
 			url: sessionStorage.alfurl + '/service/cmis/query?q=' + qry,
 			success : function (feed) {
-
 				var foldercount = 0;
 				var folderlist = new Array();
 				for (var i = 0; i < feed.items.length; i++) {
@@ -715,6 +895,11 @@ function setCompradorTheme() {
 			titl = "brownstyle";
 			sessionStorage.css = "W";
 			break;
+		case "P":
+			href = "css/main-prof.css";
+			titl = "profstyle";
+			sessionStorage.css = "P";
+			break;
 		default:
 			href = "css/main.css";
 			titl = "defaultstyle";
@@ -723,12 +908,12 @@ function setCompradorTheme() {
 	}
     var cssLink = "<link rel='stylesheet' title='" + titl + "' type='text/css' href='" + href + "'>";
 
-	//$('link[title="bluestyle"]').remove();
-	$('link[title="bluestyle"]').prop('disabled', true);
-	//$('link[title="greenstyle"]').remove();
-	$('link[title="greenstyle"]').prop('disabled', true);
-	//$('link[title="brownstyle"]').remove();
-	$('link[title="brownstyle"]').prop('disabled', true);
+	$('link[title="bluestyle"]').remove();
+	//$('link[title="bluestyle"]').prop('disabled', true);
+	$('link[title="greenstyle"]').remove();
+	//$('link[title="greenstyle"]').prop('disabled', true);
+	$('link[title="brownstyle"]').remove();
+	//$('link[title="brownstyle"]').prop('disabled', true);
     $("head").append(cssLink); 
 
 	//$.magnificPopup.close();
@@ -788,93 +973,164 @@ function clearAppCache() {
 	alert("TODO");
 }
 
-function createnewFolder() {
-	var nm = $.trim($("#foldername").val());
-	var desc = $.trim($("#folderdesc").val());
-	if (nm == "") {
-		alert("Please enter Folder Name.");
-		return;
+function setShareLink(mode) {
+	$('#setsharelink').tipsy('hide');
+	switch (mode)
+	{
+		case 1:
+			$('#sharelink').val("");
+			sessionStorage.shareurl = "";
+			break;
+		case 2:
+			var su = sessionStorage.alfurl.replace("alfresco", "share");
+			$('#sharelink').val(su);
+			sessionStorage.shareurl = su;
+			break;
+		default:
+			sessionStorage.shareurl = $.trim($('#sharelink').val());
+			break;
+	}
+	$.magnificPopup.close();
+}
+
+function deleteObject(objid, typ) {
+	var surl = "";
+	if (typ == "F") {		// Means, it is a folder being Deleted.
+		if (confirm("Are you sure to delete this folder?\nAll the sub-folders and subsequent contents will be deleted.\nThis action is not reversible!!!"))
+			surl = sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(objid) + '/tree';
+		else
+			return;
+	}
+	else {					// Means, it is a document being Deleted.
+		var did = $.url().param("docid");
+		if (confirm("Are you sure to delete this document?\nThis action is not reversible!!!"))
+			surl = sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(did);
+		else
+			return;
 	}
 
-	var atomentry = "<?xml version='1.0' encoding='utf-8'?><entry xmlns=\"http://www.w3.org/2005/Atom\" xmlns:app=\"http://www.w3.org/2007/app\" xmlns:cmis=\"http://docs.oasis-open.org/ns/cmis/core/200908/\" xmlns:cmisra=\"http://docs.oasis-open.org/ns/cmis/restatom/200908/\" xmlns:alf=\"http://www.alfresco.org\"><title>" + nm + "</title><summary>" + desc + "</summary><cmisra:object><cmis:properties><cmis:propertyId propertyDefinitionId=\"cmis:objectTypeId\"><cmis:value>cmis:folder</cmis:value></cmis:propertyId><cmis:propertyId propertyDefinitionId=\"cmis:baseTypeId\"><cmis:value>cmis:folder</cmis:value></cmis:propertyId><cmis:propertyString propertyDefinitionId=\"cmis:name\"><cmis:value>" + $.trim($("#foldername").val()) + "</cmis:value></cmis:propertyString><cmis:propertyString propertyDefinitionId=\"cm:title\"><cmis:value>" + $.trim($("#foldername").val()) + "</cmis:value></cmis:propertyString></cmis:properties></cmisra:object></entry>";
-
 	$.ajax({
-		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(sessionStorage.currfolder) + '/children',
-		data: atomentry,
+		url: surl,
 		contentType: 'application/atom+xml;type=entry',
-		type: 'POST',
+		type: 'DELETE',
 		dataType: 'xml',
 		processData: false,
 
 		success: function(data) {
-			showFolders(sessionStorage.currfolder);
+			if (typ == "F") {		// Means, it is a folder being Deleted.
+				$.magnificPopup.close();
+				showFolders(sessionStorage.parentFolder);
+			}
+			else {					// Means, it is a document being Deleted.
+				window.location = $("#goback").attr("href");
+			}
 		},
 
 		error: function(jqXHR, textStatus, errorThrown) {
 			alert(errorThrown);
 		}
-
-	});
-
-	$.magnificPopup.close();
+	});	
 }
 
-function createnewTextFile()
-{
-	var nm = $.trim($("#textfilename").val()) + ".txt";
-	var desc = nm;
-	var content = Base64.encode($("#textcontent").val());
 
-	var atomentry = "<?xml version='1.0' encoding='utf-8'?><entry xmlns=\"http://www.w3.org/2005/Atom\" xmlns:app=\"http://www.w3.org/2007/app\" xmlns:cmis=\"http://docs.oasis-open.org/ns/cmis/core/200908/\" xmlns:cmisra=\"http://docs.oasis-open.org/ns/cmis/restatom/200908/\" xmlns:alf=\"http://www.alfresco.org\"><title>" + nm + "</title><summary>" + desc + "</summary><content type=\"application/text\">" + content + "</content><cmisra:object><cmis:properties><cmis:propertyId propertyDefinitionId=\"cmis:objectTypeId\"><cmis:value>cmis:document</cmis:value></cmis:propertyId><cmis:propertyId propertyDefinitionId=\"cmis:baseTypeId\"><cmis:value>cmis:document</cmis:value></cmis:propertyId><cmis:propertyString propertyDefinitionId=\"cmis:name\"><cmis:value>" + nm + "</cmis:value></cmis:propertyString><cmis:propertyString propertyDefinitionId=\"cm:title\"><cmis:value>" + nm + "</cmis:value></cmis:propertyString></cmis:properties></cmisra:object></entry>";
+function getBaseTypes() {
+	$.msg({ bgPath : 'images/', autoUnblock : false, clickUnblock : false, content : 'Please wait, retrieving data ...' });
+	$.getFeed ({
+		url: sessionStorage.alfurl + '/service/cmis/types',
+		success : function (feed) {
+			var types = "", typecount = 0;
+			var typelist = new Array();
+			for (var i in feed.items)
+			{
+				var item = feed.items[i];
+				var id = item.cmistype.id.replaceAll(":", "-");
+				$('#baseul').append('<li id="li-' + id + '"><input type="checkbox" id="chk-' + id + '" onclick="loadTypes(\'' + id + '\')" /><label for="chk-' + id + '">' + item.title + " (" + item.cmistype.id + ')</label></li>');
+			}
+			$.msg( 'unblock' );
+		}})
+}
 
-	$.ajax({
-		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(sessionStorage.currfolder) + '/children',
-		data: atomentry,
-		contentType: 'application/atom+xml;type=entry',
-		type: 'POST',
-		dataType: 'xml',
-		processData: false,
+function loadTypes(id) {
+	var cmisid = id.replaceAll("-", ":");
+	$.getFeed ({
+		url: sessionStorage.alfurl + '/service/cmis/type/' + cmisid + '/children',
+		success : function (feed) {
+			$('#li-' + id).append('<ul id="ul-' + id + '">');
 
-		success: function(data) {
-			showFolders(sessionStorage.currfolder);
-		},
+			if (feed.items.length > 0) {
+				for (var i in feed.items)
+				{
+					var item = feed.items[i];
+					var cid = item.cmistype.id.replaceAll(":", "-");
+					$('#ul-' + id).append('<li id="li-' + cid + '"><input type="checkbox" id="chk-' + cid + '" onclick="loadTypes(\'' + cid + '\')" /><label for="chk-' + cid + '">' + item.title + " (" + item.cmistype.id + ')</label></li>');
+				}
+			}
+			else {
+				$('#ul-' + id).append('<li style="opacity: .6; cursor: default; font-style: italic;">No items...</li>');
+			}
 
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert(errorThrown);
+			$('#chk-' + id).attr("onclick", "loadType('" + id + "')");
+			loadType(id);
+		}})
+}
+
+function loadType(id) {
+	$.msg({ bgPath : 'images/', autoUnblock : false, clickUnblock : false, content : 'Please wait, retrieving data ...' });
+
+	var cmisid = id.replaceAll("-", ":");
+	$.getFeed ({
+		url: sessionStorage.alfurl + '/service/cmis/type/' + cmisid,
+		success : function (feed) {
+			var ctype = feed.item.cmistype;
+			$('#typedet').html("Details of Type: " + ctype.displayName);
+
+			/*var det = "";
+			det += "Id: " + ctype.id + "<br/>";
+			det += "Author: " + ctype.author + "<br/>";
+			det += "Local Name: " + ctype.localName + "<br/>";
+			det += "Local Namespace: " + ctype.localNamespace + "<br/>";
+			det += "Display Name: " + ctype.displayName + "<br/>";
+			det += "Query Name: " + ctype.queryName + "<br/>";
+			det += "Description: " + ctype.description + "<br/>";
+			det += "Base Id: " + ctype.baseId + "<br/>";
+			det += "Creatable: " + ctype.creatable + "<br/>";
+			det += "Fileable: " + ctype.fileable + "<br/>";
+			det += "Queryable: " + ctype.queryable + "<br/>";
+			$('#typedetails').html(det);*/
+
+			$('#typedetails').html('');
+			$('#typedetails').append('<table id="tabtypedetails"></table>');
+			$('#tabtypedetails').dataTable( {
+					"aaData": ctype.propertiesData,
+					"aoColumns": [
+						{ "sTitle": "Property", mData: "name" },
+						{ "sTitle": "Value", mData: "value" }
+					],
+					"sPaginationType": "full_numbers"
+				} );
+			$.msg( 'unblock' );
+
+		}})
+}
+
+
+function getRepositoryInfo() {
+	$.getJSON(sessionStorage.alfurl + '/cmisbrowser', function(data) {
+		var rid;
+		for (var p in data) {
+			rid = p;
 		}
+		doParse(data);
 
-	});
-
-	$.magnificPopup.close();
+		/*var resinfo = "";
+		resinfo = "<br/><strong>Respository Id :&nbsp;</strong>" + rid;
+		resinfo += "<br/><strong>Product Version :&nbsp;</strong>" + data[rid]["productVersion"];
+		resinfo += "<br/><strong>Repository Description :&nbsp;</strong>" + data[rid]["repositoryDescription"];
+		resinfo += "<br/><strong>Repostory Name :&nbsp;</strong>" + data[rid]["repositoryName"];
+		resinfo += "<br/><strong>Repository Url :&nbsp;</strong>" + data[rid]["repositoryUrl"];
+		$("#resinfo").html("Connected to Alfresco CMIS Repository." + resinfo);
+		$("#resinfo").css("display", "block");
+		$("#getmein").css("display", "block");*/
+	})
 
 }
-
-function createnewHTMLFile()
-{
-	var nm = $.trim($("#htmlfilename").val()) + ".html";
-	var desc = nm;
-	var content = Base64.encode($("#htmlcontent").val());
-
-	var atomentry = "<?xml version='1.0' encoding='utf-8'?><entry xmlns=\"http://www.w3.org/2005/Atom\" xmlns:app=\"http://www.w3.org/2007/app\" xmlns:cmis=\"http://docs.oasis-open.org/ns/cmis/core/200908/\" xmlns:cmisra=\"http://docs.oasis-open.org/ns/cmis/restatom/200908/\" xmlns:alf=\"http://www.alfresco.org\"><title>" + nm + "</title><summary>" + desc + "</summary><content type=\"application/html\">" + content + "</content><cmisra:object><cmis:properties><cmis:propertyId propertyDefinitionId=\"cmis:objectTypeId\"><cmis:value>cmis:document</cmis:value></cmis:propertyId><cmis:propertyId propertyDefinitionId=\"cmis:baseTypeId\"><cmis:value>cmis:document</cmis:value></cmis:propertyId><cmis:propertyString propertyDefinitionId=\"cmis:name\"><cmis:value>" + nm + "</cmis:value></cmis:propertyString><cmis:propertyString propertyDefinitionId=\"cm:title\"><cmis:value>" + nm + "</cmis:value></cmis:propertyString></cmis:properties></cmisra:object></entry>";
-
-	$.ajax({
-		url: sessionStorage.alfurl + '/service/cmis/i/' + extractNodeRef(sessionStorage.currfolder) + '/children',
-		data: atomentry,
-		contentType: 'application/atom+xml;type=entry',
-		type: 'POST',
-		dataType: 'xml',
-		processData: false,
-
-		success: function(data) {
-			showFolders(sessionStorage.currfolder);
-		},
-
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert(errorThrown);
-		}
-
-	});
-
-	$.magnificPopup.close();
-}
-

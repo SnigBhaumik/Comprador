@@ -1,6 +1,6 @@
 
 button {
-	background-color: #00A2E8;
+	background-color: #166384;
 	color: #FFFFFF;
 }
 
@@ -17,11 +17,15 @@ button {
 }
 
 #leftpanel {
-	background-color: #6495ED; /* #4169E1;*/
+	background-color: #2D6793; /* #4169E1;*/
 }
 
 #rightpanel {
 	background-color: #87CEFA;
+}
+
+#searchleftpanel {
+	background-color: #617CDD; 
 }
 
 #propheader {
@@ -60,25 +64,25 @@ button {
 }
 
 #taskheader {
-	background-color: #4169E1;
+	background-color: #4898C9;
 	color: #FFFFFF;
 }
 
 #mysites {
-	background-color: #6495ED;
+	background-color: #38A0D1;
 }
 
 #siteheader {
-	background-color: #00BFFF;
+	background-color: #568CAD;
 	color: #000000;
 }
 
 #mydocuments {
-	background-color: #4682B4;
+	background-color: #79AECE;
 }
 
 #mydocheader {
-	background-color: #00BFFF;
+	background-color: #4682B4;
 	color: #000000;
 }
 
@@ -89,15 +93,45 @@ button {
 #preferences {
 	background-color: #4682B4;
 	color: #000000;
+	box-shadow: 10px 10px 15px #335C77;
 }
 
 #newfolderdialog {
 	background-color: #4682B4;
 	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #335C77;
+}
+
+#newdocdialog {
+	background-color: #4682B4;
+	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #335C77;
 }
 
 #newtextdialog {
 	background-color: #4682B4;
+	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #335C77;
+}
+
+#newhtmldialog {
+	background-color: #4682B4;
+	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #335C77;
+}
+
+#folderinfodialog {
+	background-color: #6F9FC6;
+	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #335C77;
+}
+
+.folderproperties {
+	background-color: #235C84;
+}
+
+#fileDetails {
+	background-color: #4B5E66;
 	color: #FFFFFF;
 }
 
@@ -109,6 +143,7 @@ button {
 #helpcmis {
 	background-color: #4682B4;
 	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #335C77;
 }
 
 #helpheader {
@@ -117,7 +152,7 @@ button {
 }
 
 #docslist tr:nth-child(even) td {
-	background-color:#00BFFF;
+	background-color: #70AFD3;
 }
 
 #pagefooter {
@@ -153,6 +188,10 @@ button {
 	color: #000000;
 }
 
+#mydoclist li a:hover {
+	color: #4682B4;
+}
+
 #menupanel a:hover {
 	color: #00008B;
 }
@@ -169,4 +208,50 @@ button {
 
 #foldertoolbar ul li a {
 	color: #0000CD;
+}
+
+
+.jqte {
+	margin: 0;
+}
+
+.jqte_editor {
+	height: 330px;
+}
+
+
+
+.typespanel {
+	background-color: #8DB5D6;
+	color: #000000;
+}
+
+#typesheader {
+	background-color: #619CCC;
+	color: #000000;
+}
+
+#typedetailspanel {
+	background-color: #99BCD8;
+	color: #000000;
+}
+
+
+
+.ui-tabs .ui-tabs-nav li {
+	border-bottom: 2px solid #041991;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	background-color: #041991;
+	color: #FFFFFF;
+	border-bottom: 0px solid black;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+	color: #FFFFFF;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	color: #041991;
 }

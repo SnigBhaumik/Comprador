@@ -100,10 +100,31 @@ JFeedItem.prototype = {
 	icon : '',
 	download: '',
 
-	cmisobject: null
+	cmisobject: null,
+	cmistype: null
 };
 
 //////////////////////
+function cmisType() {};
+cmisType.prototype = {
+
+	id: '',
+	author: '',
+	localName: '',
+	localNamespace: '',
+	displayName: '',
+	queryName: '',
+	description: '',
+	baseId: '',
+	creatable: '',
+	fileable: '',
+	queryable: '',
+	properties: null,
+	propertiesData: null
+
+};
+
+
 function cmisObject() {};
 cmisObject.prototype = {
 
@@ -126,7 +147,14 @@ cmisObject.prototype = {
 	aspectsData: null,
 	propertiesALF: null,
 	propertiesDataALF: null,
-	path: ''
+	path: '',
+	canDeleteObject: '',
+	canUpdateProperties: '',
+	canCreateDocument: '',
+	canCreateFolder: '',
+	canCreateRelationship: '',
+	canMoveObject: '',
+	canCreateRelationship: ''
 
 };
 
@@ -143,6 +171,7 @@ aspect.prototype = {
 	value: ''
 };
 //////////////////////
+
 
 function JAtom(xml) {
     this._parse(xml);
@@ -171,12 +200,12 @@ JAtom.prototype = {
             
             item.title = $(this).find('title').eq(0).text();
             item.link = $(this).find('link').eq(0).attr('href');
-            item.description = $(this).find('content').eq(0).text();
+            item.description = $(this).find('summary').eq(0).text();
             item.updated = $(this).find('updated').eq(0).text();
             item.id = $(this).find('id').eq(0).text();
 	        item.download = $(this).find('content').attr('src');
-
 			item.icon = $(this).find('alf\\:icon').eq(0).text();
+
 			var cobj = new cmisObject();
 			cobj.name = $(this).find('*[propertyDefinitionId="cmis:name"]').eq(0).first().text();
 			cobj.createdBy = $(this).find('*[propertyDefinitionId="cmis:createdBy"]').eq(0).first().text();
@@ -197,7 +226,20 @@ JAtom.prototype = {
 			cobj.contentStreamLength = $(this).find('*[propertyDefinitionId="cmis:contentStreamLength"]').eq(0).first().text();
 			cobj.webpreview = $(this).find('*[cmisra\\:renditionKind="alf:webpreview"]').eq(0).attr("href");
 			item.cmisobject = cobj;
-            
+
+			var ctyp = new cmisType();
+			ctyp.id = $(this).find('cmisra\\:type').eq(0).find('cmis\\:id').eq(0).text();
+			ctyp.localName = $(this).find('cmisra\\:type').eq(0).find('cmis\\:localName').eq(0).text();
+			ctyp.localNamespace = $(this).find('cmisra\\:type').eq(0).find('cmis\\:localNamespace').eq(0).text();
+			ctyp.displayName = $(this).find('cmisra\\:type').eq(0).find('cmis\\:displayName').eq(0).text();
+			ctyp.queryName = $(this).find('cmisra\\:type').eq(0).find('cmis\\:queryName').eq(0).text();
+			ctyp.description = $(this).find('cmisra\\:type').eq(0).find('cmis\\:description').eq(0).text();
+			ctyp.baseId = $(this).find('cmisra\\:type').eq(0).find('cmis\\:baseId').eq(0).text();
+			ctyp.creatable = $.toBoolean($(this).find('cmisra\\:type').eq(0).find('cmis\\:creatable').eq(0).text());
+			ctyp.fileable = $.toBoolean($(this).find('cmisra\\:type').eq(0).find('cmis\\:fileable').eq(0).text());
+			ctyp.queryable = $.toBoolean($(this).find('cmisra\\:type').eq(0).find('cmis\\:queryable').eq(0).text());
+			item.cmistype = ctyp;
+			
             feed.items.push(item);
         });
     }
@@ -261,9 +303,9 @@ JAtomSingle.prototype = {
         
         var feed = this;
         
-		item.title = $(entri).find('title').eq(0).text();
+		item.title = $(entri).find('*[propertyDefinitionId="cm:title"]').eq(0).first().text();
 		item.link = $(entri).find('link').eq(0).attr('href');
-		item.description = $(entri).find('content').eq(0).text();
+		item.description = $(entri).find('summary').eq(0).text();
 		item.updated = $(entri).find('updated').eq(0).text();
 		item.id = $(entri).find('id').eq(0).text();
         item.download = $(this).find('content').attr('src');
@@ -329,7 +371,42 @@ JAtomSingle.prototype = {
 			}
 		}
 
+		cobj.canDeleteObject = $.toBoolean($(entri).find('cmisra\\:object').eq(0).find('cmis\\:allowableActions').eq(0).find('cmis\\:canDeleteObject').eq(0).text());
+		cobj.canUpdateProperties = $.toBoolean($(entri).find('cmisra\\:object').eq(0).find('cmis\\:allowableActions').eq(0).find('cmis\\:canUpdateProperties').eq(0).text());
+		cobj.canCreateDocument = $.toBoolean($(entri).find('cmisra\\:object').eq(0).find('cmis\\:allowableActions').eq(0).find('cmis\\:canCreateDocument').eq(0).text());
+		cobj.canCreateFolder = $.toBoolean($(entri).find('cmisra\\:object').eq(0).find('cmis\\:allowableActions').eq(0).find('cmis\\:canCreateFolder').eq(0).text());
+		cobj.canMoveObject = $.toBoolean($(entri).find('cmisra\\:object').eq(0).find('cmis\\:allowableActions').eq(0).find('cmis\\:canMoveObject').eq(0).text());
+		cobj.canCreateRelationship = $.toBoolean($(entri).find('cmisra\\:object').eq(0).find('cmis\\:allowableActions').eq(0).find('cmis\\:canCreateRelationship').eq(0).text());
 		item.cmisobject = cobj;
+
+		var ctyp = new cmisType();
+		ctyp.author = $(entri).find('author').eq(0).find('name').eq(0).text();
+		ctyp.id = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:id').eq(0).text();
+		ctyp.localName = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:localName').eq(0).text();
+		ctyp.localNamespace = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:localNamespace').eq(0).text();
+		ctyp.displayName = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:displayName').eq(0).text();
+		ctyp.queryName = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:queryName').eq(0).text();
+		ctyp.description = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:description').eq(0).text();
+		ctyp.baseId = $(entri).find('cmisra\\:type').eq(0).find('cmis\\:baseId').eq(0).text();
+		ctyp.creatable = $.toBoolean($(entri).find('cmisra\\:type').eq(0).find('cmis\\:creatable').eq(0).text());
+		ctyp.fileable = $.toBoolean($(entri).find('cmisra\\:type').eq(0).find('cmis\\:fileable').eq(0).text());
+		ctyp.queryable = $.toBoolean($(entri).find('cmisra\\:type').eq(0).find('cmis\\:queryable').eq(0).text());
+
+		ctyp.properties = $(entri).find('cmisra\\:type').eq(0).children();
+		ctyp.propertiesData = new Array();
+		for (var i=0; i<=ctyp.properties.length; i++)
+		{
+			var x = ctyp.properties[i];
+			if (x) {
+				var p = new objectProperty();
+				p.name = x.tagName;
+				p.value = x.textContent.replaceAll('\n', '<br/>');
+				p.type = x.nodeName;
+				ctyp.propertiesData.push(p);
+			}
+		}
+
+		item.cmistype = ctyp;
 
         feed.item = item;
     }

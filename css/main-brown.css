@@ -5,11 +5,11 @@ button {
 }
 
 #mainwindow {
-	background-color: #FFE4B5;
+	background-color: #F7F0E3; /* #FFE4B5;*/
 }
 
 #menupanel {
-	background-color: #FFE4B5;
+	background-color: #F7F0E3; /* #FFE4B5;*/
 }
 
 #toppanel {
@@ -22,6 +22,10 @@ button {
 
 #rightpanel {
 	background-color: #DEB887;
+}
+
+#searchleftpanel {
+	background-color: #F2E2CD; 
 }
 
 #propheader {
@@ -55,8 +59,8 @@ button {
 }
 
 #mytasks {
-	background-color: #B8860B;
-	color: #FFFFFF;
+	background-color: #C9AD6C;
+	color: #000000;
 }
 
 #taskheader {
@@ -65,7 +69,7 @@ button {
 }
 
 #mysites {
-	background-color: #8B4513;
+	background-color: #AF876D;
 }
 
 #siteheader {
@@ -74,7 +78,7 @@ button {
 }
 
 #mydocuments {
-	background-color: #D8BFD8;
+	background-color: #DDC8BC;
 }
 
 #mydocheader {
@@ -90,16 +94,46 @@ button {
 #preferences {
 	background-color: #F5DEB3;
 	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #B8860B;
 }
 
 #newfolderdialog {
 	background-color: #F5DEB3;
 	color: #000000;
+	box-shadow: 5px 5px 15px #B8860B;
+}
+
+#newdocdialog {
+	background-color: #F5DEB3;
+	color: #000000;
+	box-shadow: 5px 5px 15px #B8860B;
 }
 
 #newtextdialog {
 	background-color: #F5DEB3;
 	color: #000000;
+	box-shadow: 5px 5px 15px #B8860B;
+}
+
+#newhtmldialog {
+	background-color: #F5DEB3;
+	color: #000000;
+	box-shadow: 5px 5px 15px #B8860B;
+}
+
+#folderinfodialog {
+	background-color: #F5DEB3;
+	color: #000000;
+	box-shadow: 5px 5px 15px #B8860B;
+}
+
+.folderproperties {
+	background-color: #93743E;
+}
+
+#fileDetails {
+	background-color: #84560B;
+	color: #FFFFFF;
 }
 
 #prefheader {
@@ -110,6 +144,7 @@ button {
 #helpcmis {
 	background-color: #F5DEB3;
 	color: #000000;
+	box-shadow: 10px 10px 15px #B8860B;
 }
 
 #helpheader {
@@ -154,6 +189,10 @@ button {
 	color: #FFEBCD;
 }
 
+#mydoclist li a:hover {
+	color: #FFEBCD;
+}
+
 #menupanel a:hover {
 	color: #B22222;
 }
@@ -170,4 +209,48 @@ button {
 
 #foldertoolbar ul li a {
 	color: #B22222;	
+}
+
+
+.jqte {
+	margin: 0;
+}
+
+.jqte_editor {
+	height: 330px;
+}
+
+
+.typespanel {
+	background-color: #F2D5B0;
+	color: #000000;
+}
+
+#typesheader {
+	background-color: #D2B48C;
+	color: #000000;
+}
+
+#typedetailspanel {
+	background-color: #F2E0C9;
+	color: #000000;
+}
+
+
+.ui-tabs .ui-tabs-nav li {
+	border-bottom: 2px solid #725206;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	background-color: #725206;
+	color: #FFFFFF;
+	border-bottom: 0px solid black;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+	color: #FFFFFF;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	color: #725206;
 }

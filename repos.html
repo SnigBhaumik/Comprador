@@ -8,6 +8,9 @@
 	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery.msg.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.4.custom.css" />
+	<link rel="stylesheet" type="text/css" href="css/tree.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
 
 	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
@@ -18,10 +21,13 @@
     <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
 	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
 	<script type="text/javascript" src="js/lib/purl.js"></script>
+	<script type="text/javascript" src="js/lib/jquery-ui-1.10.4.custom.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 	<script type="text/javascript" src="js/upload.js"></script>
 	<script type="text/javascript" src="js/jQuery.atomEntry.js"></script>
 	<script type="text/javascript" src="js/lib/base64.js"></script>
+	<script type="text/javascript" src="js/parse.js"></script>
+
 </head>
 
 <body>
@@ -36,47 +42,40 @@
 	<section id="menupanel"></section>
 	
 	<div id="mainwindow" width="100%">
-		<section id="toppanel" class="docpageheader"><h3 id="docheader" style="float:left; width: 70%; margin-left: 40px"></h3><p style="float:right"><a id="goback"><img src="images/back-icon.png" style="width: 80px; height: auto; border: 0"/></a></p></section>
-		<section id="docpanel">
-			<section id="previewpanel">
-				<embed type="application/x-shockwave-flash" id="flashvidpreview" width="100%" height="600px" src="" />
-			</section>
-			<section id="actionspanel">
-				<table id="docactions">
-					<tr><td><a class="downloaddoc"><img src="images/download.png" class="action-icon" />Download Document</a></td></tr>
-					<tr><td><a class="deletedoc"><img src="images/remove.png" class="action-icon" />Delete Document</a></td></tr>
-					<tr><td><img src="images/upload.png" class="action-icon" />Upload new version</td></tr>
-					<tr><td><img src="images/edit.png" class="action-icon" />Edit Document (Check Out)</td></tr>
-					<tr><td><img src="images/checkin.png" class="action-icon" />Finish Editing (Check In)</td></tr>
-				</table>
-			</section>
-		</section>
-		<section id="propertiespanel">
-			<section id="cmispropertiespanel">
-				<header id="propheader">
-					<h4>CMIS Properties</h4>
-				</header>
-				<div style="padding:10px"><table id="docproperties"></table></div>
-			</section>
-			<section id="alfpropertiespanel">
-				<header id="propheader">
-					<h4>Alfresco Properties</h4>
-				</header>
-				<div style="padding:10px"><table id="docalfproperties"></table></div>
-			</section>
-			<section id="aspectspanel">
-				<header id="propheader">
-					<h4>Alfresco Aspects</h4>
-				</header>
-				<div style="padding:10px"><table id="docalfaspects"></table></div>
-			</section>
-			<section id="versionspanel">
-				<header id="propheader">
-					<h4>Document Versions</h4>
-				</header>
-				<div style="padding:10px"><ul id="docversions"></ul></div>
-			</section>
-		</section>
+		<section id="toppanel" class="repoheader"><h3 style="float:left; margin-left: 40px; margin-top: 10px;">Repository Information</h3></section>
+		<div id="tabs">
+			<ul>
+				<li><a href="#divinfo">Repository Information&nbsp;&nbsp;</a></li>
+				<li><a href="#divtypes">Registered types in the Repository&nbsp;&nbsp;</a></li>
+			</ul>
+			<div id="divinfo">
+				<section class="rinfo">
+					<header id="typesheader">
+						<h2>Information</h2>
+						<p class="note">General Information about the Repository.</p>
+					</header>
+					<div id="output" class="output"></div>
+				</section>
+			</div>
+			<div id="divtypes">
+				<section class="typespanel">
+					<header id="typesheader">
+						<h2>Types</h2>
+						<p class="note">Types and sub-types available in the Repository.</p>
+					</header>
+					<div class="css-treeview" style="margin: 10px">
+						<ul id="baseul"></ul>
+					</div>
+				</section>
+				<section id="typedetailspanel">
+					<header id="typesheader">
+						<h2>Details</h2>
+						<p class="note" id="typedet">select a type from the tree.</p>
+					</header>
+					<div style="padding:10px" id="typedetails"></div>
+				</section>
+			</div>
+		</div>
 		<footer id="pagefooter"></footer>
 	</div>
 
@@ -111,10 +110,9 @@
 		$(document).ready(function () {
 			loadStyle();
 			buildMenu();
-			showDocument();
-			$(".deletedoc").bind("click", function() {
-				deleteObject(null, "D");
-			});
+			getRepositoryInfo();
+			getBaseTypes();
+			$( "#tabs" ).tabs();
 		});
 	</script>
 </body>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Comprador - The Alfresco Client</title>
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-te-1.4.0.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.msg.css" />
+
+	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
+	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
+	<script type="text/javascript" src="js/lib/jquery-te-1.4.0.js"></script>
+	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.center.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
+	<script type="text/javascript" src="js/lib/purl.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/upload.js"></script>
+	<script type="text/javascript" src="js/jQuery.atomEntry.js"></script>
+	<script type="text/javascript" src="js/lib/base64.js"></script>
+</head>
+
+<body>
+	<script>
+		checkUser();
+	</script>
+
+	<header class="pageheader">
+		<h2><a href="https://github.com/SnigBhaumik/Comprador" target="_blank">Comprador</a></h2>
+	</header>
+
+	<section id="menupanel"></section>
+
+	<div id="mainwindow" width="100%">
+		<section id="toppanel" class="browserheader">
+			<nav id="breadcrumb">Repository Browser</nav>
+		</section>
+		<section id="leftpanel">
+			<ul id="folderlist"></ul>
+		</section>
+		<section id="foldertoolbar">
+			<ul>
+				<li><a class="newfolder" href="#newfolderdialog" title="New Folder">New Folder</a></li>
+				<li><a class="newdocument" href="#newdocdialog" title="Upload a File">Upload File</a></li>
+				<li><a class="newtxtdoc" href="#newtextdialog" title="Author a new Text Document">Create Text Document</a></li>
+				<li><a class="newhtmldoc" href="#newhtmldialog" title="Author a new HTML Document">Create HTML Document</a></li>
+				<li><a class="folderinfo" href="#folderinfodialog" title="Folder Information">Information</a></li>
+			</ul>
+		</section>
+		<section id="rightpanel" style="padding: 0">
+			<table id="docslist" width="100%"></table>
+			<div id="pagination"></div>
+		</section>
+		<footer id="pagefooter"></footer>
+	</div>
+
+	<section id="preferences" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Preferences</h2>
+			<p class="note">Utilities for you.</p>
+		</section>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px" id="themeoptions">
+			<legend>Comprador Theme</legend>
+			<input type="radio" id="themeblue" class="themeoption" name="themeoption" value="B" /><label for="themeblue">I prefer Blue</label><br/>
+			<input type="radio" id="themegreen" class="themeoption" name="themeoption" value="G" /><label for="themegreen">Green suits me</label><br/>
+			<input type="radio" id="themebrown" class="themeoption" name="themeoption" value="W" /><label for="themebrown">Let's try Brown</label><br/>
+			<input type="radio" id="themeprof" class="themeoption" name="themeoption" value="P" /><label for="themeprof">Professional</label><br/>
+			<input type="radio" id="themedefault" class="themeoption" name="themeoption" value="D" /><label for="themedefault">Default is Okay</label><br/>
+		</fieldset>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Comprador Cache</legend>
+			<button class="clearbtn" id="cachebutton" style="width: 100%">Clear Cache</button>
+		</fieldset>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Alfresco Share Link</legend>
+			<div align="center" id="setsharelink">
+				<input type="url" id="sharelink" size="40" /><br/><br/>
+				<button class="cancelbtn" onclick="setShareLink(1)">Clear</button>&nbsp;<button class="defaultbtn" onclick="setShareLink(2)">Set Default</button>&nbsp;<button class="okbtn" onclick="setShareLink(3)">Ok</button>
+			</div>
+		</fieldset>
+		<button onclick="$.magnificPopup.close()" style="margin: 20px 10px 0 10px; width: 96%">Close</button>
+	</section>
+
+	<section id="newfolderdialog" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Create New Folder</h2>
+		</section>
+		<div style="margin: 20px 40px 0">
+			Name of the folder.<br/><input type="text" id="foldername" /><br/><br/>
+			Description.<br/><textarea id="folderdesc" rows="3" cols="36"></textarea><br/><br/>
+			<button onclick="createnewFolder()" style="margin: 10px 10px 0 0;" class="okbtn">Create Folder</button><button onclick="$.magnificPopup.close()" style="margin: 10px 10px 0 0;" class="cancelbtn">Cancel</button>
+		</div>
+	</section>
+
+	<section id="newdocdialog" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Upload a File</h2>
+		</section>
+		<div style="margin: 20px 40px 0">
+			<table width="100%" border="0" cellpadding="10">
+				<tr>
+					<td rowspan="2" width="12%"><h4>Select a File.<br/><br/>OR<br/><br/>Drag & Drop here.</h4></td>
+					<td><input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();" class="btn" /></td>
+				</tr>
+				<tr><td><div id="filedropzone"></div></td></tr>
+			</table>
+			<div id="fileDetails">Please select File.</div>
+			Title.<br/><input type="text" id="filetitle" size="50" /><br/><br/>
+			Description.<br/><textarea id="filedesc" rows="3" cols="40"></textarea><br/><br/>
+			<button onclick="uploadFile()" style="margin: 10px 10px 0 0;" class="okbtn" id="uploadfile">Upload File</button><button onclick="$.magnificPopup.close()" style="margin: 10px 10px 0 0;" class="cancelbtn">Cancel</button>
+		</div>
+	</section>
+
+	<section id="newtextdialog" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Author a new Text File</h2>
+		</section>
+		<div style="margin: 20px 40px 0">
+			File Name.<br/><input id="textfilename" />.txt
+			<br/><br/>
+			Text Content.<br/><textarea id="textcontent" rows="18" cols="88"></textarea><br/><br/>
+			<button onclick="createnewTextFile()" style="margin: 10px 10px 0 0;" class="okbtn">Create Content</button><button onclick="$.magnificPopup.close()" style="margin: 10px 10px 0 0;" class="cancelbtn">Cancel</button>
+		</div>
+	</section>
+
+	<section id="newhtmldialog" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Author a new HTML File</h2>
+		</section>
+		<div style="margin: 20px 40px 0">
+			File Name.<br/><input id="htmlfilename" />.html
+			<br/><br/>
+			HTML Content.<textarea id="htmlcontent" class="editor" rows="25" cols="90"></textarea>
+			<button onclick="createnewHTMLFile()" style="margin: 10px 10px 0 0;" class="okbtn">Create Content</button><button onclick="$.magnificPopup.close()" style="margin: 10px 10px 0 0;" class="cancelbtn">Cancel</button>
+		</div>
+	</section>
+
+	<section id="folderinfodialog" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Folder Information</h2>
+		</section>
+		<div style="margin: 5px">
+			<section id="cmispropertiespanel" style="float:left; width: 64%">
+				<header id="propheader"><h4>This Folder</h4></header>
+				<div class="finfo"></div>
+			</section>
+			<section id="cmispropertiespanel" style="float:right; width: 30%">
+				<header id="propheader"><h4>Actions</h4></header>
+				<div class="factions" style="padding: 20px 10px 10px 15px">
+					<a class="deletefolder">Delete Folder</a><br/><br/>
+					<a class="updatefolderproperties">Update Properties</a>
+					<div class="folderproperties">
+						<label for="fname">Name.</label><br/><input name="fname" id="fname" type="text"/><br/>
+						<label for="ftitle">Title.</label><br/><input name="ftitle" id="ftitle" type="text"/><br/>
+						<label for="fdesc">Description.</label><br/><textarea name="fdesc" id="fdesc" rows="4" cols="17"></textarea><br/>
+						<button id="updatepropertiesbutton" style="margin-top: 5px" class="okbtn">Update</button><button style="margin-top: 5px" class="cancelbtn" onclick="$('.folderproperties').css('display','none')">Cancel</button>
+					</div>
+				</div>
+			</section>
+			<button onclick="$.magnificPopup.close()" style="margin: 10px 0 0 10px; width: 97%">Close</button>
+		</div>
+	</section>
+
+	<section id="folderpropsdialog" class="white-popup mfp-hide">
+		<section id="prefheader">
+			<h2>Edit Folder Properties</h2>
+		</section>
+		<div style="margin: 12px">
+			<button onclick="$.magnificPopup.close()" style="margin: 10px 10px 0 0; width: 100%">Close</button>
+		</div>
+	</section>
+
+	<script>
+		$(document).ready(function () {
+			loadStyle();
+			buildMenu();
+			buildToolbar();
+			showRootFolders();
+
+			$('#filedropzone').bind('dragenter', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+			});
+			$('#filedropzone').bind('dragover', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+			});
+			$('#filedropzone').bind('drop', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+
+				var dt = e.originalEvent.dataTransfer;
+				var files = dt.files;
+
+				$("#filedropzone").html(files[0].name);
+				$("#filedropzone").css("border-style", "inset");
+				fileSelected(files);
+			});
+		});
+	</script>
+
+</body>
+</html>

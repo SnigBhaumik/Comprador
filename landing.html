@@ -6,11 +6,14 @@
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.msg.css" />
 
 	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.jfeed.js"></script>
 	<script type="text/javascript" src="js/lib/jquery.magnific-popup.js"></script>
 	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.center.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -26,6 +29,9 @@
 	<section id="menupanel"></section>
 
 	<div id="mainwindow" width="100%">
+		<section id="toppanel" class="dashheader">
+			<h3 style="margin: 12px 0 0 36px; float: left;">Dashboard</h3>
+		</section>
 		<aside id="mytasks">
 			<header id="taskheader">
 				<h2>Tasks</h2>
@@ -55,29 +61,37 @@
 			<h2>Preferences</h2>
 			<p class="note">Utilities for you.</p>
 		</section>
-		<fieldset class="searchoptions" style="margin: 30px 65px 0 65px">
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px" id="themeoptions">
 			<legend>Comprador Theme</legend>
 			<input type="radio" id="themeblue" class="themeoption" name="themeoption" value="B" /><label for="themeblue">I prefer Blue</label><br/>
 			<input type="radio" id="themegreen" class="themeoption" name="themeoption" value="G" /><label for="themegreen">Green suits me</label><br/>
 			<input type="radio" id="themebrown" class="themeoption" name="themeoption" value="W" /><label for="themebrown">Let's try Brown</label><br/>
+			<input type="radio" id="themeprof" class="themeoption" name="themeoption" value="P" /><label for="themeprof">Professional</label><br/>
 			<input type="radio" id="themedefault" class="themeoption" name="themeoption" value="D" /><label for="themedefault">Default is Okay</label><br/>
 		</fieldset>
 		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
 			<legend>Comprador Cache</legend>
-			<div class="btn" id="cachebutton" style="width: 92%">Clear Cache</div>
+			<button class="clearbtn" id="cachebutton" style="width: 100%">Clear Cache</button>
 		</fieldset>
-		<button onclick="$.magnificPopup.close()" style="margin: 45px 10px 0 10px; width: 96%">Close</button>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Alfresco Share Link</legend>
+			<div align="center" id="setsharelink">
+				<input type="url" id="sharelink" size="40" /><br/><br/>
+				<button class="cancelbtn" onclick="setShareLink(1)">Clear</button>&nbsp;<button class="defaultbtn" onclick="setShareLink(2)">Set Default</button>&nbsp;<button class="okbtn" onclick="setShareLink(3)">Ok</button>
+			</div>
+		</fieldset>
+		<button onclick="$.magnificPopup.close()" style="margin: 20px 10px 0 10px; width: 96%">Close</button>
 	</section>
 
 	<script>
 		$(document).ready(function () {
+			$.msg({ bgPath : 'images/', autoUnblock : false, clickUnblock : false, content : 'Please wait, loading dashboard ...' });
 			loadStyle();
 			buildMenu();
 			getSites();
 			getTasks();
-			$('.themeoption').bind('click', function(){
-				setCompradorTheme();
-			});
+			getDocs();
+			$.msg( 'unblock' );
 		});
 	</script>
 </body>

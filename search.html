@@ -15,6 +15,7 @@
     <script type="text/javascript" src="js/lib/jquery.center.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.msg.js"></script>
 	<script type="text/javascript" src="js/lib/tooltipsy.js"></script>
+	<script type="text/javascript" src="js/lib/purl.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
@@ -30,11 +31,13 @@
 	<section id="menupanel"></section>
 
 	<div id="mainwindow" width="100%">
-		<section id="toppanel">
-			<header class="searchtoppanel"><h3 id="searchheader">Search Repository</h3>
-			<p class="searchsummary"></p></header>
+		<section id="toppanel" class="searchtoppanel">
+			<div class="searchinfo">
+				<h3 id="searchheader">Search Repository</h3>
+				<p class="searchsummary"></p>
+			</div>
 		</section>
-		<section id="leftpanel">
+		<section id="searchleftpanel">
 			<fieldset class="searchoptions">
 				<legend>Search What?</legend>
 				<input type="text" list="recentterms" id="searchbox" /><br/>&nbsp;<br/>
@@ -45,8 +48,8 @@
 			</fieldset>
 			<fieldset class="searchoptions">
 				<legend>CMIS Custom Query</legend>
-				<textarea id="querybox" rows="5" cols="36" wrap="soft"></textarea>
-				<a class="helpicon" href="#helpcmis" title="CMIS Query Tips"></a>
+				<textarea id="querybox" rows="5" cols="30" wrap="soft" style="float: left"></textarea>
+				<a class="helpicon" href="#helpcmis" title="CMIS Query Tips" style="float: right"></a>
 				<div class="btn" id="querybutton" style="width: 92%">Execute Query</div>
 			</fieldset>
 		</section>
@@ -59,7 +62,7 @@
 	<section id="helpcmis" class="white-popup mfp-hide">
 		<section id="helpheader">
 			<h2>Sample CMIS Queries</h2>
-			<p class="note">Click on the Query to use it.</p>
+			<p class="note">Click on a Query to use it.</p>
 		</section>
 		<p class="note">
 			<ul class="helpnote">
@@ -80,18 +83,26 @@
 			<h2>Preferences</h2>
 			<p class="note">Utilities for you.</p>
 		</section>
-		<fieldset class="searchoptions" style="margin: 30px 65px 0 65px">
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px" id="themeoptions">
 			<legend>Comprador Theme</legend>
 			<input type="radio" id="themeblue" class="themeoption" name="themeoption" value="B" /><label for="themeblue">I prefer Blue</label><br/>
 			<input type="radio" id="themegreen" class="themeoption" name="themeoption" value="G" /><label for="themegreen">Green suits me</label><br/>
 			<input type="radio" id="themebrown" class="themeoption" name="themeoption" value="W" /><label for="themebrown">Let's try Brown</label><br/>
+			<input type="radio" id="themeprof" class="themeoption" name="themeoption" value="P" /><label for="themeprof">Professional</label><br/>
 			<input type="radio" id="themedefault" class="themeoption" name="themeoption" value="D" /><label for="themedefault">Default is Okay</label><br/>
 		</fieldset>
 		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
 			<legend>Comprador Cache</legend>
-			<div class="btn" id="cachebutton" style="width: 92%">Clear Cache</div>
+			<button class="clearbtn" id="cachebutton" style="width: 100%">Clear Cache</button>
 		</fieldset>
-		<button onclick="$.magnificPopup.close()" style="margin: 45px 10px 0 10px; width: 96%">Close</button>
+		<fieldset class="searchoptions" style="margin: 20px 65px 0 65px">
+			<legend>Alfresco Share Link</legend>
+			<div align="center" id="setsharelink">
+				<input type="url" id="sharelink" size="40" /><br/><br/>
+				<button class="cancelbtn" onclick="setShareLink(1)">Clear</button>&nbsp;<button class="defaultbtn" onclick="setShareLink(2)">Set Default</button>&nbsp;<button class="okbtn" onclick="setShareLink(3)">Ok</button>
+			</div>
+		</fieldset>
+		<button onclick="$.magnificPopup.close()" style="margin: 20px 10px 0 10px; width: 96%">Close</button>
 	</section>
 
 
@@ -106,9 +117,6 @@
 			$('#searchbutton').bind('click', function() {
 				search($('#searchbox').val());
 			});
-			$('#cachebutton').bind('click', function() {
-				clearAppCache();
-			});
 			$('.helpicon').magnificPopup({
 				type: 'inline',
 				src: '#helpcmis',
@@ -117,6 +125,16 @@
 			$('.helpline').bind('click', function() {
 				$("#querybox").val(this.firstChild.textContent);
 				$.magnificPopup.close();
+			});
+			$('#searchbox').tipsy({
+				gravity: 'w',
+				fade: true,
+				fallback: 'Double click to see recently searched terms'
+			});
+			$('.helpicon').tipsy({
+				gravity: 'sw',
+				fade: true,
+				fallback: 'CMIS Query Tips'
 			});
 		});
 	</script>

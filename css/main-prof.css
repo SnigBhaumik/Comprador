@@ -1,0 +1,298 @@
+
+button {
+	background-color: #7F7E7E;
+	color: #000000;
+}
+
+#mainwindow {
+	background-color: #FCFCF9;
+}
+
+#menupanel {
+	background-color: #FCFCF9;
+}
+
+#toppanel {
+	background-color: #A3A39B;
+}
+
+#leftpanel {
+	background-color: #EAE5E5;
+	color: #000000;
+}
+
+#rightpanel {
+	background-color: #D3CFCF;
+	color: #000000;
+}
+
+#searchleftpanel {
+	background-color: #EDEAEA;
+}
+
+#propheader {
+	background-color: #696969;
+	color: #FFFFFF;
+}
+
+#cmispropertiespanel {
+	background-color: #D3D3D3;
+	color: #000000;
+}
+
+#alfpropertiespanel {
+	background-color: #D3D3D3;
+	color: #000000;
+}
+
+#aspectspanel {
+	background-color: #D3D3D3;
+	color: #000000;
+}
+
+#versionspanel {
+	background-color: #D3D3D3;
+	color: #000000;
+}
+
+#previewpanel {
+	background-color: #EFEFEF;
+}
+
+#actionspanel {
+	background-color: #EFEFEF;
+	color: #000000;
+}
+
+#mytasks {
+	background-color: #DCDCDC;
+	color: #000000;
+}
+
+#taskheader {
+	background-color: #B5B5B5;
+	color: #FFFFFF;
+}
+
+#mysites {
+	background-color: #DCDCDC;
+}
+
+#siteheader {
+	background-color: #B5B5B5;
+	color: #FFFFFF;
+}
+
+#mydocuments {
+	background-color: #DCDCDC;
+}
+
+#mydocheader {
+	background-color: #B5B5B5;
+	color: #FFFFFF;
+}
+
+.searchoptions {
+	background-color: #DBD4D4;
+	color: #000000;
+}
+
+#preferences {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+#newfolderdialog {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+#newdocdialog {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+#newtextdialog {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+#newhtmldialog {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+#folderinfodialog {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+.folderproperties {
+	background-color: #848383;
+}
+
+#fileDetails {
+	background-color: #6B6767;
+	color: #FFFFFF;
+}
+
+#prefheader {
+	background-color: #8E8989;
+	color: #FFFFFF;
+}
+
+#helpcmis {
+	background-color: #EDEAEA;
+	color: #000000;
+	box-shadow: 5px 5px 15px #8E8989;
+}
+
+#helpheader {
+	background-color: #8E8989;
+	color: #FFFFFF;
+}
+
+#docslist tr:nth-child(even) td {
+	background-color: #EAE5E5;
+}
+
+#pagefooter {
+	background-color: #EAE8E8;
+	color: #000000;
+}
+
+.note a {
+	color: #000000;
+}
+
+.note a:hover {
+	color: #B2ADAD;
+}
+
+#breadcrumb a:hover {
+	color: #000000;
+}
+
+#folderlist li a {
+	color: #000000;
+}
+
+#folderlist a:hover {
+	color: #B2ADAD;
+}
+
+#docslist a {
+	color: #7C5D5D;
+}
+
+#docslist a:hover {
+	color: #000000;
+}
+
+#tasklist li a {
+	color: #696969;
+}
+
+#tasklist li a:hover {
+	color: #000000;
+}
+
+#sitelist li a {
+	color: #696969;
+}
+
+#sitelist li a:hover {
+	color: #000000;
+}
+
+#mydoclist li a {
+	color: #696969;
+}
+
+#mydoclist li a:hover {
+	color: #000000;
+}
+
+#menupanel a:hover {
+	color: #B2ADAD;
+}
+
+#pagination {
+	background-color: #EFEAEA;
+	color: #FFFFFF;
+}
+
+#foldertoolbar {
+	color: #000000;
+	background: linear-gradient(#FCF7F7, #A3A1A1);
+}
+
+#foldertoolbar ul li a {
+	color: #000000;
+}
+
+
+
+.jqte {
+	margin: 0;
+}
+
+.jqte_editor {
+	height: 330px;
+}
+
+table.dataTable tr.odd { background-color: #D4D4D6; }
+table.dataTable tr.even { background-color: #FFFFFF; }
+
+table.dataTable tr.odd td.sorting_1 { background-color: #E0E1E5; }
+table.dataTable tr.odd td.sorting_2 { background-color: #E3E3E5; }
+table.dataTable tr.odd td.sorting_3 { background-color: #E0E0E0; }
+table.dataTable tr.even td.sorting_1 { background-color: #E5E5E5; }
+table.dataTable tr.even td.sorting_2 { background-color: #EDEDED; }
+table.dataTable tr.even td.sorting_3 { background-color: #EAEAEA; }
+
+.paging_full_numbers a.paginate_active {	background-color: #C2C2C4;	}
+
+
+.typespanel {
+	background-color: #DCDCDC;
+	color: #000000;
+}
+
+#typesheader {
+	background-color: #B5B5B5;
+	color: #FFFFFF;
+}
+
+#typedetailspanel {
+	background-color: #F4F2F2;
+	color: #000000;
+}
+
+
+
+.ui-tabs .ui-tabs-nav li {
+	border-bottom: 2px solid #777676;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	background-color: #777676;
+	color: #FFFFFF;
+	border-bottom: 0px solid black;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+	color: #FFFFFF;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	color: #777676;
+}
+
+

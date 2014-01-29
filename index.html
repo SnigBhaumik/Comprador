@@ -7,22 +7,19 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<script type="text/javascript" src="js/lib/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="js/lib/base64.min.js"></script>
+	<script type="text/javascript" src="js/lib/purl.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
-<!-- <body style="background:#ffffff url('images/application_footer.png') no-repeat 7% -80%; background-size: 300px 300px"> -->
 <body>
- 	<!-- <header id="pageheader">
-		<h2>Comprador</h2>
-	</header> -->
 	<img src="images/application.png" style="position: absolute; opacity:0.04; margin-top: 100px;" />
 	<div id="connectInfo" width="50%">
 		<section id="header">
 			<h2>Connect to your Alfresco Server</h2>
-			<div class="note">Put your Alfresco Server CMIS ATOMPUB Url and User Credential below.</div>
+			<div class="note">Put your Alfresco User Credential below. The Server Url is automatically retrieved from Comprador Url.</div>
 		</section>
 		<table id="connectDet" border="0" align="left" cellspacing="10" style="margin: 10px 0 10px 30px" width="100%">
-			<tr><td align="left">Alfresco Server Url<br/><input type="url" id="serverUrl" size="30px" value="http://localhost:8080/alfresco" />/cmisatom</td></tr>
+			<tr><td align="left">Alfresco Server Url<br/><input type="url" id="serverUrl" size="40" value="http://localhost:8080/alfresco" disabled="true" />/cmisatom</td></tr>
 			<tr><td align="left">User Name<br/><input type="text" id="userName" value="admin" /></td></tr>
 			<tr><td align="left">Password<br/><input type="password" id="password" value="admin" /></td></tr>
 			<tr><td align="left"><div class="btn" id="loginbutton">Connect Me !!!</div></td></tr>
@@ -40,6 +37,7 @@
 			$('#getmein').bind('click', function(){
 				window.location = "landing.html";
 			});
+			setAppUrl();
 		});
 	</script>
 </body>

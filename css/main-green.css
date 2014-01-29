@@ -5,11 +5,11 @@ button {
 }
 
 #mainwindow {
-	background-color: #66CDAA;
+	background-color: #CCFCEB; /*#66CDAA;*/
 }
 
 #menupanel {
-	background-color: #66CDAA;
+	background-color: #CCFCEB; /* #66CDAA;*/
 }
 
 #toppanel {
@@ -22,6 +22,10 @@ button {
 
 #rightpanel {
 	background-color: #7FFFD4;
+}
+
+#searchleftpanel {
+	background-color: #A0E8A7; 
 }
 
 #propheader {
@@ -90,15 +94,45 @@ button {
 #preferences {
 	background-color: #008080;
 	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #309367;
 }
 
 #newfolderdialog {
 	background-color: #008080;
 	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #309367;
+}
+
+#newdocdialog {
+	background-color: #008080;
+	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #309367;
 }
 
 #newtextdialog {
 	background-color: #008080;
+	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #309367;
+}
+
+#newhtmldialog {
+	background-color: #008080;
+	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #309367;
+}
+
+#folderinfodialog {
+	background-color: #008080;
+	color: #FFFFFF;
+	box-shadow: 5px 5px 15px #309367;
+}
+
+.folderproperties {
+	background-color: #66B766;
+}
+
+#fileDetails {
+	background-color: #085417;
 	color: #FFFFFF;
 }
 
@@ -110,6 +144,7 @@ button {
 #helpcmis {
 	background-color: #008080;
 	color: #FFFFFF;
+	box-shadow: 10px 10px 15px #309367;
 }
 
 #helpheader {
@@ -154,6 +189,10 @@ button {
 	color: #32CD32;
 }
 
+#mydoclist li a:hover {
+	color: #32CD32;
+}
+
 #menupanel a:hover {
 	color: #32CD32;
 }
@@ -170,4 +209,52 @@ button {
 
 #foldertoolbar ul li a {
 	color: #006400;
+}
+
+
+
+.jqte {
+	margin: 0;
+}
+
+.jqte_editor {
+	height: 330px;
+}
+
+
+
+
+
+.typespanel {
+	background-color: #B4F7E2;
+	color: #000000;
+}
+
+#typesheader {
+	background-color: #60A08C;
+	color: #000000;
+}
+
+#typedetailspanel {
+	background-color: #C8F7E8;
+	color: #000000;
+}
+
+
+.ui-tabs .ui-tabs-nav li {
+	border-bottom: 2px solid #3E6054;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	background-color: #3E6054;
+	color: #FFFFFF;
+	border-bottom: 0px solid black;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+	color: #FFFFFF;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	color: #3E6054;
 }
